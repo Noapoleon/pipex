@@ -6,3 +6,9 @@ BEFORE UPLOAD:
 	- remove makefile debug variable and it's uses
 	- add comments to all functions
 	- nm check for forbidden functions
+
+INTERROGATIONS:
+	- how does functions get called in c file
+	- does function validity need to be checked in the middle of the program
+	  while performing the pipes or does it need to be done before
+	- how does creating, appending and overwriting files work?
