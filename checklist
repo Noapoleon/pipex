@@ -1,4 +1,3 @@
-srcs
 BEFORE UPLOAD:
 	- norm check sources
 	- norm check headers
@@ -7,6 +6,8 @@ BEFORE UPLOAD:
 	- remove makefile debug variable and it's uses
 	- add comments to all functions
 	- nm check for forbidden functions
+	- remove random ft_printf / printf calls
+	- FORBIDDEN FUNCTION CHECK WITH NM
 
 INTERROGATIONS:
 	- how does functions get called in c file

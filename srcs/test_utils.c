@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 04:49:11 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/14 19:19:00 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/14 21:45:12 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,3 +53,18 @@ void	do_ls(void)
 	}
 }
 
+void	show_pipex_state(t_pipex *pipex)
+{
+	ft_printf("### PIPEX STATE ###\n");
+	ft_printf("fd_if -> %d\n", pipex->fd_if);
+	ft_printf("fd_of -> %d\n\n", pipex->fd_of);
+	ft_printf("paths addr -> %p\n", pipex->paths);
+	ft_printf("Paths:\n");
+	int i = 0;
+	while (pipex->paths[i])
+	{
+		ft_printf("paths[%d] -> %s\n", i, pipex->paths[i]);
+		++i;
+	}
+	ft_printf("###################\n");
+}

@@ -8,6 +8,7 @@ LIBFT	=	libft
 
 # Files
 SRCS	:=	pipex.c \
+			setup.c \
 			utils.c \
 			test_utils.c # REMOVE LATER
 OBJS	:=	$(SRCS:.c=.o)
@@ -41,6 +42,11 @@ $(OBJDIR):
 $(LIBDIR):
 	mkdir -p $(LIBDIR)
 
+resrcs: cleansrcs $(OBJS)
+
+cleansrcs:
+	$(RM) $(OBJS)
+
 clean:
 	make clean -C $(LIBFT)
 	$(RM) $(OBJS)
@@ -52,4 +58,4 @@ fclean:	clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re resrcs cleansrcs
