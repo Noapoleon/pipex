@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 17:53:15 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/14 19:20:50 by nlegrand         ###   ########.fr       */
+/*   Created: 2022/12/14 17:46:01 by nlegrand          #+#    #+#             */
+/*   Updated: 2022/12/14 19:20:25 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	main(int ac, char **av, char **envp)
+// Prints correct usage if input is bad
+void	check_inputs(int ac, char **av)
 {
-	(void)ac;
 	(void)av;
-	(void)envp;
-
-	errno = 0; // i think the manual says you can and should do this (or maybe stackoverflow)
-	check_inputs(ac, av);
-	show_params(ac, av);
-	//show_envp(envp);
-	//do_ls();
-	return (0);
+	// not done, if heredoc then needs to be different
+	if (ac < 5 || (ac >= 2 && ac < 6 &&
+		ft_memcmp(HEREDOC, av[1], ft_strlen(HEREDOC) + 1) == 0))
+	{
+		ft_printf(USAGE_N);
+		ft_printf(USAGE_CMD);
+		ft_printf(USAGE_HD);
+		ft_printf(USAGE_CMD);
+		exit(EXIT_FAILURE);
+	}
 }

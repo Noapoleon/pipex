@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:54:48 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/14 05:22:16 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/14 17:47:23 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include <stdlib.h>
 // perror
 # include <stdio.h>
+// errno
+# include <errno.h>
 // strerror
 # include <string.h>
 // wait, waitpid
@@ -42,7 +44,15 @@ struct s_pipex
 	int	fd_of;
 };
 
+// UTILS
+void	check_inputs(int ac, char **av);
+
+
+
+
 // TEST UTILS
 void	show_params(int ac, char **av);
+void	show_envp(char **envp);
+void	do_ls(void);
 
 #endif

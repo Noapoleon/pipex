@@ -1,3 +1,4 @@
+srcs
 BEFORE UPLOAD:
 	- norm check sources
 	- norm check headers
@@ -12,3 +13,7 @@ INTERROGATIONS:
 	- does function validity need to be checked in the middle of the program
 	  while performing the pipes or does it need to be done before
 	- how does creating, appending and overwriting files work?
+
+
+DEBUG:
+	- valgrind --leak-check=full --show-leak-kinds=all --track-fds=all

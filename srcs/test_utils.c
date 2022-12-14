@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 04:49:11 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/14 05:05:47 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/14 19:19:00 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,6 @@
 void	show_params(int ac, char **av)
 {
 	int	i;
-
-	// show usage in case of bad use
-	// check_input()
-	if (ac < 5)
-	{
-		ft_printf(USAGE_N);
-		ft_printf(USAGE_CMD);
-		ft_printf(USAGE_HD);
-		ft_printf(USAGE_CMD);
-		exit(EXIT_FAILURE);
-	}
 
 	// input and output files
 	// get_files() => does fd checks
@@ -41,3 +30,26 @@ void	show_params(int ac, char **av)
 		++i;
 	}
 }
+
+void	show_envp(char **envp)
+{
+	int	i = 0;
+	
+	while (envp[i])
+		printf("%s\n", envp[i++]);
+}
+
+void	do_ls(void)
+{
+	int	ret;
+	char	*cmd[] = {"ls", "-la", (char *)0};
+	char	*env[] = {"HOME=/usr/home", "LOGNAME=home", (char *)0};
+	
+	ret = execve("ls", cmd, env);
+	if (ret == -1)
+	{
+		printf("grosse merde\n");
+		perror("do_ls");
+	}
+}
+

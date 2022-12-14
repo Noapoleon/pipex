@@ -8,6 +8,7 @@ LIBFT	=	libft
 
 # Files
 SRCS	:=	pipex.c \
+			utils.c \
 			test_utils.c # REMOVE LATER
 OBJS	:=	$(SRCS:.c=.o)
 SRCS	:=	$(addprefix $(SRCDIR)/, $(SRCS))
@@ -18,7 +19,7 @@ CC		=	cc
 CFLAGS	=	-Wall -Wextra -Werror
 CLIBS	=	-L./$(LIBDIR) -lft
 CINCS	=	-I./$(INCDIR)
-DEBUG	=	-g3 -gdwarf-4
+DEBUG	=	-g3 -gdwarf-4 -O3
 
 # Other
 RM	=	rm -rf
@@ -29,7 +30,7 @@ $(NAME): $(LIBDIR)/libft.a $(OBJS)
 	$(CC) $(DEBUG) $(CFLAGS) $(OBJS) $(CLIBS) -o $(NAME)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR) $(LIBDIR)
-	$(CC) $(CFLAGS) $(CINCS) -c $< -o $@
+	$(CC) $(DEBUG) $(CFLAGS) $(CINCS) -c $< -o $@
 
 $(LIBDIR)/libft.a:
 	make -C $(LIBFT)
