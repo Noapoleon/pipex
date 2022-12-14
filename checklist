@@ -1,0 +1,8 @@
+BEFORE UPLOAD:
+	- norm check sources
+	- norm check headers
+	- norm check libft
+	- relink
+	- remove makefile debug variable and it's uses
+	- add comments to all functions
+	- nm check for forbidden functions
