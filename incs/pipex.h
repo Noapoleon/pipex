@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:54:48 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/14 05:12:51 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/14 05:22:16 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ typedef struct s_pipex t_pipex;
 
 struct s_pipex
 {
-	int	fd_i;
-	int	fd_o;
+	int	fd_if;
+	int	fd_of;
 };
 
 // TEST UTILS
