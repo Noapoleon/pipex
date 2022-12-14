@@ -46,6 +46,7 @@ clean:
 
 fclean:	clean
 	$(RM) $(LIBFT)/libft.a
+	$(RM) $(LIBDIR)/libft.a
 	$(RM) $(NAME)
 
 re: fclean all
