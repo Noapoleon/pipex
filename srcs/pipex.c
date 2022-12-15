@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:53:15 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/14 22:00:22 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/15 07:45:51 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ int	main(int ac, char **av, char **envp)
 	show_pipex_state(&pipex);
 	//show_envp(envp);
 	//do_ls();
+	pipex_terminate(&pipex);
 	return (0);
 }

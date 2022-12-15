@@ -10,7 +10,7 @@ LIBFT	=	libft
 SRCS	:=	pipex.c \
 			setup.c \
 			utils.c \
-			test_utils.c # REMOVE LATER
+			test_utils.c # REMOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOVE LATER
 OBJS	:=	$(SRCS:.c=.o)
 SRCS	:=	$(addprefix $(SRCDIR)/, $(SRCS))
 OBJS	:=	$(addprefix $(OBJDIR)/, $(OBJS))
@@ -20,7 +20,7 @@ CC		=	cc
 CFLAGS	=	-Wall -Wextra -Werror
 CLIBS	=	-L./$(LIBDIR) -lft
 CINCS	=	-I./$(INCDIR)
-DEBUG	=	-g3 -gdwarf-4 -O3
+DEBUG	=	-g3 -gdwarf-4 -O3 # REMOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOVE LATER
 
 # Other
 RM	=	rm -rf
@@ -28,10 +28,10 @@ RM	=	rm -rf
 all: $(NAME)
 
 $(NAME): $(LIBDIR)/libft.a $(OBJS)
-	$(CC) $(DEBUG) $(CFLAGS) $(OBJS) $(CLIBS) -o $(NAME)
+	$(CC) $(DEBUG) $(CFLAGS) $(OBJS) $(CLIBS) -o $(NAME) # REMOOOOOOOOOOOOOOOOOVE LATER
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR) $(LIBDIR)
-	$(CC) $(DEBUG) $(CFLAGS) $(CINCS) -c $< -o $@
+	$(CC) $(DEBUG) $(CFLAGS) $(CINCS) -c $< -o $@ # REMOOOOOOOOOOOOOOOOOOOOOOOOVE LATER
 
 $(LIBDIR)/libft.a:
 	make -C $(LIBFT)

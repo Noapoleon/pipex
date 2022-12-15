@@ -6,11 +6,25 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 04:49:11 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/14 21:45:12 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/15 08:31:10 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	do_ls(void)
+{
+	int	ret;
+	char	*cmd[] = {"ls", "-la", (char *)0};
+	char	*env[] = {"HOME=/usr/home", "LOGNAME=home", (char *)0};
+	
+	ret = execve("ls", cmd, env);
+	if (ret == -1)
+	{
+		printf("grosse merde\n");
+		perror("do_ls");
+	}
+}
 
 void	show_params(int ac, char **av)
 {
@@ -39,20 +53,6 @@ void	show_envp(char **envp)
 		printf("%s\n", envp[i++]);
 }
 
-void	do_ls(void)
-{
-	int	ret;
-	char	*cmd[] = {"ls", "-la", (char *)0};
-	char	*env[] = {"HOME=/usr/home", "LOGNAME=home", (char *)0};
-	
-	ret = execve("ls", cmd, env);
-	if (ret == -1)
-	{
-		printf("grosse merde\n");
-		perror("do_ls");
-	}
-}
-
 void	show_pipex_state(t_pipex *pipex)
 {
 	ft_printf("### PIPEX STATE ###\n");
@@ -65,6 +65,16 @@ void	show_pipex_state(t_pipex *pipex)
 	{
 		ft_printf("paths[%d] -> %s\n", i, pipex->paths[i]);
 		++i;
+	}
+	t_cmd *curr = pipex->cmds;
+	while (curr != NULL)
+	{
+		ft_printf("commmand ->");
+		i = 0;
+		while (curr->cmd[i])
+			ft_printf(" %s", curr->cmd[i++]);
+		ft_printf("\npath -> %s\n", curr->path);
+		curr = curr->next;
 	}
 	ft_printf("###################\n");
 }
