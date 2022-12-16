@@ -14,7 +14,19 @@ INTERROGATIONS:
 	- does function validity need to be checked in the middle of the program
 	  while performing the pipes or does it need to be done before
 	- how does creating, appending and overwriting files work?
+	- [IMP] what to do when empty string is given for function:
+		* empty strings will probably cause ac to not match the number of functions
+		  This would probably lead to segfault as loop goes out of scope
+		* solution: keep an int in pipex struct with number of functions
+		* should I even support empty strings?? I want to say no but I'm not sure
+		  , I could argue that the pipe operator returns and error if given nothing
+		  in between 2 pipes (e.g.: ls | | grep "truc" ----> makes an error)
+		  But I still need to not segfault (fini le truc d'abord gros con)
 
 
 DEBUG:
 	- valgrind --leak-check=full --show-leak-kinds=all --track-fds=all
+
+TESTING:
+	- empty function strings, file strings
+

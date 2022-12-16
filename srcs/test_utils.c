@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 04:49:11 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/15 08:31:10 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/16 06:22:45 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,33 @@ void	do_ls(void)
 	char	*cmd[] = {"ls", "-la", (char *)0};
 	char	*env[] = {"HOME=/usr/home", "LOGNAME=home", (char *)0};
 	
-	ret = execve("ls", cmd, env);
+	ret = execve("/usr/bin/ls", cmd, env);
 	if (ret == -1)
 	{
 		printf("grosse merde\n");
 		perror("do_ls");
+	}
+}
+
+void	do_all(t_pipex *pipex, char **envp)
+{
+	t_cmd	*curr;
+	int		ret;
+
+	curr = pipex->cmds;
+	while (curr != NULL)
+	{
+		ft_printf("truc\n");
+		ft_printf("curr addr -> %p\n", curr);
+		ft_printf("curr next -> %p\n", curr->next);
+		ret = execve(curr->path, curr->cmd, envp);
+		ft_printf("bababoui");
+		if (ret == -1)
+		{
+			printf("grosse merde\n");
+			perror("do_all");
+		}
+		curr = curr->next;
 	}
 }
 

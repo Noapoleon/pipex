@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 17:46:01 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/15 19:09:28 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/16 06:07:37 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void	setup_pipex(t_pipex *pipex, int ac, char **av, char **envp)
 // Prints correct usage if input is bad
 void	check_inputs(int ac, char **av)
 {
-	(void)av;
-	// not done, if heredoc then needs to be different
+	int	i;
+
 	if (ac < 5 || (ac < 6 && ac >= 2 &&
 		ft_strncmp(av[1], HEREDOC, ft_strlen(HEREDOC) + 1) == 0))
 	{
@@ -37,6 +37,16 @@ void	check_inputs(int ac, char **av)
 		ft_printf(USAGE_HD);
 		ft_printf(USAGE_CMD);
 		exit(EXIT_FAILURE);
+	}
+	i = 0;
+	while (av[i])
+	{
+		if (av[i][0] == '\0')
+		{
+			ft_dprintf(2, E_EMPTY);
+			exit(EXIT_FAILURE);
+		}
+		++i;
 	}
 }
 
@@ -61,14 +71,14 @@ void	get_paths(t_pipex *pipex, char **envp)
 		++i;
 	if (envp[i] == NULL)
 	{
-		ft_dprintf(2, PE_NOPATH);
-		pipex_exit(pipex, DONT_PERROR);
+		ft_dprintf(2, E_NOPATH);
+		pipex_exit(pipex);
 	}
 	pipex->paths = ft_split(envp[i] + 5, ':');
 	if (pipex->paths == NULL)
 	{
-		ft_dprintf(2, PE_SPLIT);
-		pipex_exit(pipex, DO_PERROR);
+		perror("get_paths");
+		pipex_exit(pipex);
 	}
 }
 
@@ -82,30 +92,56 @@ void	get_commands(t_pipex *pipex, int ac, char **av)
 	curr = &pipex->cmds;
 	while (i <= ac - 2)
 	{
-		*curr = get_command(av[i++]);
-		if (*curr == NULL) // might not even be necessary because of terminate function
-			//do_something; terminate or something, needs to be modified to free chained list too now
-			pipex_exit(pipex, DO_PERROR);
+		*curr = make_cmd(pipex, av[i++]);
+		if (*curr == NULL)
+			pipex_exit(pipex);
 		curr = &(*curr)->next;
 	}
 }
 
-t_cmd	*get_command(char *cmd_str)
+t_cmd	*make_cmd(t_pipex *pipex, char *cmd_str)
 {
 	t_cmd	*tmp;
+	int		ret;
 
-	// malloc t_cmd node and check bad malloc
 	tmp = malloc(sizeof(t_cmd));
-	// split command string with spaces (or whitespace???), check fail with NULL
+	if (tmp == NULL)
+		return (perror("make_cmd"), NULL);
 	tmp->cmd = ft_split(cmd_str, ' ');
-//	if (tmp->args == NULL)
-//		do_something; terminate
-	tmp->path = ft_strjoin("/stoopid/dir/", tmp->cmd[0]);
-//	if (tmp->path == NULL)
-//		terminate or something;
-	// check if command exists in one of PATHs using while loop (expand)
+	if (tmp->cmd == NULL)
+		return (perror("make_cmd"), free(tmp), NULL);
+	ret = find_command(pipex, tmp->cmd[0], &tmp->path);
+	if (ret == -1)
+		return (strarr_clear(&tmp->cmd), free(tmp), NULL);
+	else if (ret == 1)
+		return (ft_dprintf(2, E_NOCMD, cmd_str), strarr_clear(&tmp->cmd)
+			, free(tmp), NULL);
 	tmp->next = NULL;
 	return (tmp);
+}
+
+int	find_command(t_pipex *pipex, const char *cmd, char **path)
+{
+	char	*slashed;
+	int			i;
+
+	slashed = ft_strjoin("/", cmd);
+	if (slashed == NULL)
+		return (perror("find_command"), -1);
+	i = 0;
+	while (pipex->paths[i])
+	{
+		*path = ft_strjoin(pipex->paths[i++], slashed);
+		if (*path == NULL)
+			return (perror("find_command"), free(slashed), -1);
+		if (access(*path, F_OK) != -1)
+			break ;
+		free(*path);
+		*path = NULL;
+	}
+	if (*path == NULL)
+		return (1);
+	return (0);
 }
 
 //void	open_files(t_pipex, int ac, char **av)
