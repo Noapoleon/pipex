@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:54:48 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/16 06:16:08 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/16 18:44:08 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ struct s_pipex
 	// could probably put main arguments in there for simplicity (e.g.: ac, av, envp)
 	// might not be necessary though, we'll see
 };
-
 
 // SETUP
 void	setup_pipex(t_pipex *pipex, int ac, char **av, char **encp);

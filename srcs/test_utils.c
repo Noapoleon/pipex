@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 04:49:11 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/16 06:22:45 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/16 22:19:11 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,37 @@ void	do_all(t_pipex *pipex, char **envp)
 {
 	t_cmd	*curr;
 	int		ret;
+	pid_t	child_pid;
+	pid_t	wpid;
+	int		status;
 
 	curr = pipex->cmds;
 	while (curr != NULL)
 	{
-		ft_printf("truc\n");
-		ft_printf("curr addr -> %p\n", curr);
-		ft_printf("curr next -> %p\n", curr->next);
-		ret = execve(curr->path, curr->cmd, envp);
-		ft_printf("bababoui");
-		if (ret == -1)
+		//ret = execve(curr->path, curr->cmd, envp);
+		child_pid = fork();
+		// check if child_pid is -1 and terminate if so
+		if (child_pid == -1)
 		{
-			printf("grosse merde\n");
-			perror("do_all");
+			perror("fork");
+			pipex_exit(pipex);
+		}
+		else if (child_pid == 0)
+		{
+			ret = execve(curr->path, curr->cmd, envp);
+			if (ret == -1)
+			{
+				perror("execve");
+				pipex_exit(pipex);
+			}
+			pipex_terminate(pipex);
+			exit(EXIT_SUCCESS);
+		}
+		wpid = waitpid(child_pid, &status, 0); // check if options need to be something else than 0
+		if (wpid == -1)
+		{
+			perror("wait");
+			pipex_exit(pipex);
 		}
 		curr = curr->next;
 	}
