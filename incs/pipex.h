@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:54:48 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/16 18:44:08 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/18 22:14:10 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@
 // wait, waitpid
 # include <sys/wait.h>
 
-# define HEREDOC		"here_doc"
+# define HEREDOC	"here_doc"
+# define DO_EXIT	1
+# define DONT_EXIT	0
 
 // USAGE
 # define USAGE_N	"Usage: ./pipex <INPUT_FILE> "
@@ -60,7 +62,7 @@ struct s_pipex
 	int		fd_of; // haven't checked it that's useful yet
 	char 	**paths;
 	t_cmd	*cmds;
-
+	int		cmd_i;
 	// could probably put main arguments in there for simplicity (e.g.: ac, av, envp)
 	// might not be necessary though, we'll see
 };

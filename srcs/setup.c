@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 17:46:01 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/16 06:07:37 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/18 22:14:28 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	init_pipex_vars(t_pipex *pipex)
 	pipex->fd_of = -1;
 	pipex->paths = NULL;
 	pipex->cmds = NULL;
+	pipex->cmd_i = 0;
 }
 
 // Uses main's argument envp to get PATH variable
@@ -144,7 +145,18 @@ int	find_command(t_pipex *pipex, const char *cmd, char **path)
 	return (0);
 }
 
-//void	open_files(t_pipex, int ac, char **av)
-//{
-//
-//}
+void	get_files(t_pipex, int ac, char *av)
+{
+	const int	if_index;
+
+	if_index = 1;
+	if (ft_strncmp(HEREDOC, av[1], ft_strlen(HEREDOC) + 1) == 0)
+	{
+		if_index = -69; // do proper logic for heredoc later
+		ft_printf("here_doc logic not implemented yet!\n");
+		pipex_terminate(pipex, DO_EXIT);
+	}
+	else
+		if_index = 1;
+	pipex->fd_if = open(av[if_index]);
+}

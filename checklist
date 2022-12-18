@@ -22,6 +22,7 @@ INTERROGATIONS:
 		  , I could argue that the pipe operator returns and error if given nothing
 		  in between 2 pipes (e.g.: ls | | grep "truc" ----> makes an error)
 		  But I still need to not segfault (fini le truc d'abord gros con)
+	- [IMP] what does process permissions and user permissions have to do with this project ??
 
 
 DEBUG:
@@ -29,4 +30,7 @@ DEBUG:
 
 TESTING:
 	- empty function strings, file strings
+	- test files without execution permission
+	- test files that don't exist
+	- find other tests and vulnerabilities for files
 

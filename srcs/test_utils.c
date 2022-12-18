@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 04:49:11 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/16 22:19:11 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/18 22:02:50 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	do_all(t_pipex *pipex, char **envp)
 {
 	t_cmd	*curr;
 	int		ret;
-	pid_t	child_pid;
+	pid_t	parent;
 	pid_t	wpid;
 	int		status;
 
@@ -45,7 +45,7 @@ void	do_all(t_pipex *pipex, char **envp)
 			perror("fork");
 			pipex_exit(pipex);
 		}
-		else if (child_pid == 0)
+		else if (!parent)
 		{
 			ret = execve(curr->path, curr->cmd, envp);
 			if (ret == -1)
@@ -62,6 +62,7 @@ void	do_all(t_pipex *pipex, char **envp)
 			perror("wait");
 			pipex_exit(pipex);
 		}
+		++pipex->cmd_i; // do something different if index is first or last
 		curr = curr->next;
 	}
 }
