@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 04:49:11 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/19 07:16:11 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/19 09:24:26 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,31 +65,44 @@ void	do_all(t_pipex *pipex, int ac, char **envp)
 		}
 		else if (child_pid == 0)
 		{
+			printf("how many time???\n");
+			printf("next?? -> %p\n", curr->next);
+			// OMFG IT WORKING FOR A MOMENT AND I CHANGED SOIMETHING DONT REMEMBER WHAT
+			// but honeslty if i can't replicated it's not worth much...
 			if (pipex->cmd_i == 0)
 			{
 				redirect_io(pipex, pipex->fd_if, fildes[1]); // this function terminates stuff but i have NOT checked at all if some stuff in do_all needs the be freed (like fildes[2] for example, no idea)
+//				redirect_io(pipex, pipex->fd_if, 1); // this function terminates stuff but i have NOT checked at all if some stuff in do_all needs the be freed (like fildes[2] for example, no idea)
+				close(pipex->fd_if); // could probably keep them open, if line numbers are not an issue later
 			}
-			else if (pipex->cmd_i == ac - 4) // not good index i think?? -4 should be good for normal mode, check for here_doc later
+			else if (pipex->cmd_i == (ac - 4)) // not good index i think?? -4 should be good for normal mode, check for here_doc later
 			{
-				//redirect_io(pipex, fildes[0], 1);
-				redirect_io(pipex, fildes[0], pipex->fd_of); // good one (i think)
+				redirect_io(pipex, fildes[0], 1);
+//				redirect_io(pipex, fildes[0], pipex->fd_of); // good one (i think)
+				close(pipex->fd_of);
 			}
 			else
 			{
-				redirect_io(pipex, fildes[0], fildes[1]);
-
+//				redirect_io(pipex, fildes[0], fildes[1]); // THIS SHOULD BE THE GOOD ONE
+				redirect_io(pipex, fildes[1], fildes[0]); // SO WHY DOES THIS ONE KINDA WORK????
+//				redirect_io(pipex, fildes[0], 1);
 			}
+//			char buf[10];
+//			read(0, buf, 9);
+//			buf[9] = 0;
+//			fprintf(stderr, "workin?? -> %s\n", buf);
+//			fprintf(stderr, "got past here\n");
 			// close correctly here or something (not sure it needs to be here)
-			//close(fildes[0]); // can probably close pipe ends here, not sure
-			//close(fildes[1]);
+			close(fildes[0]); // can probably close pipe ends here, not sure
+			close(fildes[1]);
 			ret = execve(curr->path, curr->cmd, envp);
 			if (ret == -1)
 			{
 				perror("execve");
 				pipex_terminate(pipex, EXIT_FAILURE);
 			}
-			close(fildes[0]); // probably not here idk, or maybe not this
-			close(fildes[1]); 
+			//close(fildes[0]); // probably not here idk, or maybe not this
+			//close(fildes[1]); 
 			pipex_terminate(pipex, EXIT_SUCCESS);
 		}
 		wpid = waitpid(child_pid, NULL, 0); // check if options need to be something else than 0

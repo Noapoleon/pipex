@@ -40,3 +40,5 @@ THINK ABOUT IMPLEMENTING:
 	  the subject '>>' should be used and not '>'
 	- proper way for redirect_io because right now in do_all some stuff isn't
 	  closed like fildes[2]
+	- put pipe in struct and make function to close both pipes in case of error
+	  (or just put it in pipex_terminate()
