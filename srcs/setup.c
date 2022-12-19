@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 17:46:01 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/18 22:14:28 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/19 08:11:54 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	setup_pipex(t_pipex *pipex, int ac, char **av, char **envp)
 	get_paths(pipex, envp);
 	get_commands(pipex, ac, av);
 	// open_files()
-	// if (lalala) pipex_terminate()
+	get_files(pipex, ac, av);
 }
 
 // Prints correct usage if input is bad
@@ -51,7 +51,7 @@ void	check_inputs(int ac, char **av)
 }
 
 // Initializes the pipex struct vars to their default values to allow use of
-// fdf_terminate() at different stages without causing errors with free
+// pipex_terminate() at different stages without causing errors with free
 void	init_pipex_vars(t_pipex *pipex)
 {
 	pipex->fd_if = -1;
@@ -73,13 +73,13 @@ void	get_paths(t_pipex *pipex, char **envp)
 	if (envp[i] == NULL)
 	{
 		ft_dprintf(2, E_NOPATH);
-		pipex_exit(pipex);
+		pipex_terminate(pipex, EXIT_FAILURE);
 	}
 	pipex->paths = ft_split(envp[i] + 5, ':');
 	if (pipex->paths == NULL)
 	{
-		perror("get_paths");
-		pipex_exit(pipex);
+		perror("ft_split");
+		pipex_terminate(pipex, EXIT_FAILURE);
 	}
 }
 
@@ -95,7 +95,7 @@ void	get_commands(t_pipex *pipex, int ac, char **av)
 	{
 		*curr = make_cmd(pipex, av[i++]);
 		if (*curr == NULL)
-			pipex_exit(pipex);
+			pipex_terminate(pipex, EXIT_FAILURE);
 		curr = &(*curr)->next;
 	}
 }
@@ -145,18 +145,30 @@ int	find_command(t_pipex *pipex, const char *cmd, char **path)
 	return (0);
 }
 
-void	get_files(t_pipex, int ac, char *av)
+void	get_files(t_pipex *pipex, int ac, char **av)
 {
-	const int	if_index;
+	int	if_index;
 
-	if_index = 1;
+	// When heredoc there's probably no need to give an index at all
+	// Just create the output file and work on that directly
+	// or something like that
+	// Or maybe the output file will be the pipe file or something
 	if (ft_strncmp(HEREDOC, av[1], ft_strlen(HEREDOC) + 1) == 0)
 	{
 		if_index = -69; // do proper logic for heredoc later
 		ft_printf("here_doc logic not implemented yet!\n");
-		pipex_terminate(pipex, DO_EXIT);
+		pipex_terminate(pipex, EXIT_SUCCESS);
+		// get_heredoc() or something
 	}
 	else
 		if_index = 1;
-	pipex->fd_if = open(av[if_index]);
+	pipex->fd_if = open(av[if_index], O_RDONLY);
+	pipex->fd_of = open(av[ac - 1], O_CREAT | O_TRUNC | O_WRONLY,
+		S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP); // check if this is the correct way later
+	if (pipex->fd_if == -1 || pipex->fd_of == -1)
+	{
+		perror("open");
+		pipex_terminate(pipex, EXIT_FAILURE);
+	}
 }
+

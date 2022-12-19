@@ -6,29 +6,21 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 20:00:33 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/18 22:13:36 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/19 04:21:31 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-// Frees allocated variables in pipex struct
-void	pipex_terminate(t_pipex *pipex, int mode)
+// Frees allocated variables in pipex struct and exits program
+void	pipex_terminate(t_pipex *pipex, int exit_mode)
 {
 	strarr_clear(&pipex->paths);
 	cmdlst_clear(&pipex->cmds);
-	// close fds or something
-	if (mode == DO_EXIT)
-		exit(EXIT_SUCCESS);
-}
-
-// Terminates pipex and exits displaying an error message
-void	pipex_exit(t_pipex *pipex)
-{
-	pipex_terminate(pipex, DONT_EXIT);
-//	if (errno != 0)
-//		perror("pipex_exit");
-	exit(EXIT_FAILURE);
+	close(pipex->fd_if);
+	close(pipex->fd_of);
+	// close pipes if still open (not sure yet that this will be necessary)
+	exit(exit_mode);
 }
 
 // Frees an array of strings and sets it to NULL

@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:53:15 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/16 06:19:14 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/19 04:22:18 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(int ac, char **av, char **envp)
 	//show_pipex_state(&pipex);
 	//show_envp(envp);
 	//do_ls();
-	do_all(&pipex, envp);
-	pipex_terminate(&pipex);
+	do_all(&pipex, ac, envp);
+	pipex_terminate(&pipex, EXIT_SUCCESS);
 	return (0);
 }

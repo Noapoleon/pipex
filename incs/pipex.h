@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:54:48 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/18 22:14:10 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/19 04:21:45 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@
 # include <sys/wait.h>
 
 # define HEREDOC	"here_doc"
-# define DO_EXIT	1
-# define DONT_EXIT	0
 
 // USAGE
 # define USAGE_N	"Usage: ./pipex <INPUT_FILE> "
@@ -68,17 +66,17 @@ struct s_pipex
 };
 
 // SETUP
-void	setup_pipex(t_pipex *pipex, int ac, char **av, char **encp);
+void	setup_pipex(t_pipex *pipex, int ac, char **av, char **envp);
 void	init_pipex_vars(t_pipex *pipex);
 void	check_inputs(int ac, char **av);
 void	get_paths(t_pipex *pipex, char **envp);
 void	get_commands(t_pipex *pipex, int ac, char **av);
 t_cmd	*make_cmd(t_pipex *pipex, char *cmd_str);
 int		find_command(t_pipex *pipex, const char *cmd, char **path);
+void	get_files(t_pipex *pipex, int ac, char **av);
 
 // UTILS
-void	pipex_terminate(t_pipex *pipex); // could use some options too
-void	pipex_exit(t_pipex *pipex);
+void	pipex_terminate(t_pipex *pipex, int mode); // could use some options too
 void	strarr_clear(char ***arr);
 void	cmdlst_clear(t_cmd **cmds);
 
@@ -88,6 +86,6 @@ void	show_params(int ac, char **av);
 void	show_envp(char **envp);
 void	show_pipex_state(t_pipex *pipex);
 void	do_ls(void);
-void	do_all(t_pipex *pipex, char **envp);
+void	do_all(t_pipex *pipex, int ac, char **envp);
 
 #endif

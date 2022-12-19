@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 04:49:11 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/18 22:02:50 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/19 07:16:11 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,33 @@ void	do_ls(void)
 	}
 }
 
-void	do_all(t_pipex *pipex, char **envp)
+void	redirect_io(t_pipex *pipex, int input, int output)
+{
+	// this function terminating the program causes issues as it prevents do_all from closing fildes (I THINK, NOT ACUTALLY SURE)
+	// so find a way to fix that, maybe return int instead of terminating ??
+	if (dup2(input, 0) == -1)
+		pipex_terminate(pipex, EXIT_FAILURE);
+	if (dup2(output, 1) == -1)
+		pipex_terminate(pipex, EXIT_FAILURE);
+}
+
+void	do_all(t_pipex *pipex, int ac, char **envp)
 {
 	t_cmd	*curr;
 	int		ret;
-	pid_t	parent;
+	pid_t	child_pid;
 	pid_t	wpid;
-	int		status;
+	//int		status;
+	int		fildes[2];
 
+	(void)ac; // REMOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOVE LATER
+	// PRINTF PROBABLY WONT WORK FOR DEBBUGING AFTER CHANGING THE FDS WITH DUP2
 	curr = pipex->cmds;
+	if (pipe(fildes) == -1)
+	{
+		perror("pipe");
+		pipex_terminate(pipex, EXIT_FAILURE);
+	}
 	while (curr != NULL)
 	{
 		//ret = execve(curr->path, curr->cmd, envp);
@@ -43,24 +61,43 @@ void	do_all(t_pipex *pipex, char **envp)
 		if (child_pid == -1)
 		{
 			perror("fork");
-			pipex_exit(pipex);
+			pipex_terminate(pipex, EXIT_FAILURE);
 		}
-		else if (!parent)
+		else if (child_pid == 0)
 		{
+			if (pipex->cmd_i == 0)
+			{
+				redirect_io(pipex, pipex->fd_if, fildes[1]); // this function terminates stuff but i have NOT checked at all if some stuff in do_all needs the be freed (like fildes[2] for example, no idea)
+			}
+			else if (pipex->cmd_i == ac - 4) // not good index i think?? -4 should be good for normal mode, check for here_doc later
+			{
+				//redirect_io(pipex, fildes[0], 1);
+				redirect_io(pipex, fildes[0], pipex->fd_of); // good one (i think)
+			}
+			else
+			{
+				redirect_io(pipex, fildes[0], fildes[1]);
+
+			}
+			// close correctly here or something (not sure it needs to be here)
+			//close(fildes[0]); // can probably close pipe ends here, not sure
+			//close(fildes[1]);
 			ret = execve(curr->path, curr->cmd, envp);
 			if (ret == -1)
 			{
 				perror("execve");
-				pipex_exit(pipex);
+				pipex_terminate(pipex, EXIT_FAILURE);
 			}
-			pipex_terminate(pipex);
-			exit(EXIT_SUCCESS);
+			close(fildes[0]); // probably not here idk, or maybe not this
+			close(fildes[1]); 
+			pipex_terminate(pipex, EXIT_SUCCESS);
 		}
-		wpid = waitpid(child_pid, &status, 0); // check if options need to be something else than 0
+		wpid = waitpid(child_pid, NULL, 0); // check if options need to be something else than 0
+		//wpid = waitpid(child, &status, 0); // check if options need to be something else than 0 // don't think i need the status, not sure
 		if (wpid == -1)
 		{
-			perror("wait");
-			pipex_exit(pipex);
+			perror("waitpid");
+			pipex_terminate(pipex, EXIT_FAILURE);
 		}
 		++pipex->cmd_i; // do something different if index is first or last
 		curr = curr->next;
