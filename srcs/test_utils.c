@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 04:49:11 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/19 09:24:26 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/20 05:10:28 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,15 @@ void	redirect_io(t_pipex *pipex, int input, int output)
 {
 	// this function terminating the program causes issues as it prevents do_all from closing fildes (I THINK, NOT ACUTALLY SURE)
 	// so find a way to fix that, maybe return int instead of terminating ??
-	if (dup2(input, 0) == -1)
+	if (dup2(input, STDIN_FILENO) == -1)
 		pipex_terminate(pipex, EXIT_FAILURE);
-	if (dup2(output, 1) == -1)
+	if (dup2(output, STDOUT_FILENO) == -1)
 		pipex_terminate(pipex, EXIT_FAILURE);
+}
+void	close_pipes(int	fildes[2])
+{
+	close(fildes[0]);
+	close(fildes[1]);
 }
 
 void	do_all(t_pipex *pipex, int ac, char **envp)
@@ -47,12 +52,14 @@ void	do_all(t_pipex *pipex, int ac, char **envp)
 
 	(void)ac; // REMOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOVE LATER
 	// PRINTF PROBABLY WONT WORK FOR DEBBUGING AFTER CHANGING THE FDS WITH DUP2
-	curr = pipex->cmds;
 	if (pipe(fildes) == -1)
 	{
 		perror("pipe");
 		pipex_terminate(pipex, EXIT_FAILURE);
 	}
+	//redirect_io(pipex, fildes[0], fildes[1]); // test
+	close(fildes[1]); // test
+	curr = pipex->cmds;
 	while (curr != NULL)
 	{
 		//ret = execve(curr->path, curr->cmd, envp);
@@ -62,6 +69,11 @@ void	do_all(t_pipex *pipex, int ac, char **envp)
 		{
 			perror("fork");
 			pipex_terminate(pipex, EXIT_FAILURE);
+		}
+		else if (child_pid != 0)
+		{
+			close(fildes[0]);
+			close(fildes[1]);
 		}
 		else if (child_pid == 0)
 		{
@@ -77,24 +89,20 @@ void	do_all(t_pipex *pipex, int ac, char **envp)
 			}
 			else if (pipex->cmd_i == (ac - 4)) // not good index i think?? -4 should be good for normal mode, check for here_doc later
 			{
-				redirect_io(pipex, fildes[0], 1);
-//				redirect_io(pipex, fildes[0], pipex->fd_of); // good one (i think)
-				close(pipex->fd_of);
+//				redirect_io(pipex, fildes[0], 1);
+				redirect_io(pipex, fildes[0], pipex->fd_of); // good one (i think)
+//				close(pipex->fd_of);
 			}
 			else
 			{
-//				redirect_io(pipex, fildes[0], fildes[1]); // THIS SHOULD BE THE GOOD ONE
-				redirect_io(pipex, fildes[1], fildes[0]); // SO WHY DOES THIS ONE KINDA WORK????
+				redirect_io(pipex, fildes[0], fildes[1]); // THIS SHOULD BE THE GOOD ONE
+//				redirect_io(pipex, fildes[1], fildes[0]); // SO WHY DOES THIS ONE KINDA WORK????
 //				redirect_io(pipex, fildes[0], 1);
 			}
-//			char buf[10];
-//			read(0, buf, 9);
-//			buf[9] = 0;
-//			fprintf(stderr, "workin?? -> %s\n", buf);
-//			fprintf(stderr, "got past here\n");
 			// close correctly here or something (not sure it needs to be here)
 			close(fildes[0]); // can probably close pipe ends here, not sure
 			close(fildes[1]);
+			//close_pipes(fildes);
 			ret = execve(curr->path, curr->cmd, envp);
 			if (ret == -1)
 			{
@@ -112,9 +120,14 @@ void	do_all(t_pipex *pipex, int ac, char **envp)
 			perror("waitpid");
 			pipex_terminate(pipex, EXIT_FAILURE);
 		}
+		fprintf(stderr, "cmd_i -> %d\n", pipex->cmd_i);
+		//close(fildes[0]); // doesn't loop but straight up doesn't work anymore, which makes sense
+		//close(fildes[1]);
 		++pipex->cmd_i; // do something different if index is first or last
 		curr = curr->next;
 	}
+	//close(fildes[0]);
+	//close(fildes[1]);
 }
 
 void	show_params(int ac, char **av)
