@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 17:46:01 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/19 08:11:54 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/21 02:59:31 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void	setup_pipex(t_pipex *pipex, int ac, char **av, char **envp)
 	init_pipex_vars(pipex);
 	get_paths(pipex, envp);
 	get_commands(pipex, ac, av);
-	// open_files()
 	get_files(pipex, ac, av);
+	get_pipes(pipex, ac);
 }
 
 // Prints correct usage if input is bad
@@ -58,7 +58,10 @@ void	init_pipex_vars(t_pipex *pipex)
 	pipex->fd_of = -1;
 	pipex->paths = NULL;
 	pipex->cmds = NULL;
+	pipex->cmd_n = 0;
 	pipex->cmd_i = 0;
+	pipex->curr = NULL;
+	pipex->pipes = NULL;
 }
 
 // Uses main's argument envp to get PATH variable
@@ -78,73 +81,12 @@ void	get_paths(t_pipex *pipex, char **envp)
 	pipex->paths = ft_split(envp[i] + 5, ':');
 	if (pipex->paths == NULL)
 	{
-		perror("ft_split");
+		perror("get_paths -> ft_split");
 		pipex_terminate(pipex, EXIT_FAILURE);
 	}
 }
 
-// Parses commands from main arguments
-void	get_commands(t_pipex *pipex, int ac, char **av)
-{
-	int	i;
-	t_cmd **curr;
-
-	i = 2 + (ft_strncmp(av[1], HEREDOC, ft_strlen(HEREDOC) + 1) == 0);
-	curr = &pipex->cmds;
-	while (i <= ac - 2)
-	{
-		*curr = make_cmd(pipex, av[i++]);
-		if (*curr == NULL)
-			pipex_terminate(pipex, EXIT_FAILURE);
-		curr = &(*curr)->next;
-	}
-}
-
-t_cmd	*make_cmd(t_pipex *pipex, char *cmd_str)
-{
-	t_cmd	*tmp;
-	int		ret;
-
-	tmp = malloc(sizeof(t_cmd));
-	if (tmp == NULL)
-		return (perror("make_cmd"), NULL);
-	tmp->cmd = ft_split(cmd_str, ' ');
-	if (tmp->cmd == NULL)
-		return (perror("make_cmd"), free(tmp), NULL);
-	ret = find_command(pipex, tmp->cmd[0], &tmp->path);
-	if (ret == -1)
-		return (strarr_clear(&tmp->cmd), free(tmp), NULL);
-	else if (ret == 1)
-		return (ft_dprintf(2, E_NOCMD, cmd_str), strarr_clear(&tmp->cmd)
-			, free(tmp), NULL);
-	tmp->next = NULL;
-	return (tmp);
-}
-
-int	find_command(t_pipex *pipex, const char *cmd, char **path)
-{
-	char	*slashed;
-	int			i;
-
-	slashed = ft_strjoin("/", cmd);
-	if (slashed == NULL)
-		return (perror("find_command"), -1);
-	i = 0;
-	while (pipex->paths[i])
-	{
-		*path = ft_strjoin(pipex->paths[i++], slashed);
-		if (*path == NULL)
-			return (perror("find_command"), free(slashed), -1);
-		if (access(*path, F_OK) != -1)
-			break ;
-		free(*path);
-		*path = NULL;
-	}
-	if (*path == NULL)
-		return (1);
-	return (0);
-}
-
+// Open input and output files
 void	get_files(t_pipex *pipex, int ac, char **av)
 {
 	int	if_index;
@@ -167,8 +109,28 @@ void	get_files(t_pipex *pipex, int ac, char **av)
 		S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP); // check if this is the correct way later
 	if (pipex->fd_if == -1 || pipex->fd_of == -1)
 	{
-		perror("open");
+		perror("get_files -> open");
 		pipex_terminate(pipex, EXIT_FAILURE);
 	}
 }
 
+// 
+void	get_pipes(t_pipex *pipex, int ac)
+{
+	int	i;
+
+	pipex->pipes = malloc(sizeof(int) * (pipex->cmd_n * 2));
+	if (pipex->pipes == NULL)
+	{
+		perror("get_pipes -> malloc");
+		pipex_terminate(pipex, EXIT_FAILURE);
+	}
+	i = 0;
+	while (i < cmd_n)
+	{
+		if (pipe(pipex->pipes[i]) == -1)
+		{
+			perror("get_pipes -> pipe");
+			pipex_terminate(pipex);
+	}
+}

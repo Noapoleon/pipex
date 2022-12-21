@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 20:00:33 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/19 04:21:31 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/21 04:05:30 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 // Frees allocated variables in pipex struct and exits program
 void	pipex_terminate(t_pipex *pipex, int exit_mode)
 {
+	int	i; // probably shouldn't close pipes here but not sure
+
 	strarr_clear(&pipex->paths);
 	cmdlst_clear(&pipex->cmds);
 	close(pipex->fd_if);
 	close(pipex->fd_of);
-	// close pipes if still open (not sure yet that this will be necessary)
+	close_pipes(pipex);
 	exit(exit_mode);
 }
 
@@ -56,5 +58,18 @@ void	cmdlst_clear(t_cmd **cmds)
 			free(tmp);
 		}
 		*cmds = NULL;
+	}
+}
+
+void	close_pipes(t_pipex *pipex)
+{
+	const int	n = pipex->cmd_n * 2;
+	int i;
+
+	if (pipex->pipes)
+	{
+		i = 0;
+		while (i < n)
+			close(pipex->pipes[i++];
 	}
 }

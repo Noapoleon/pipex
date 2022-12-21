@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:54:48 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/19 04:21:45 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/21 04:05:13 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,10 @@ struct s_pipex
 	int		fd_of; // haven't checked it that's useful yet
 	char 	**paths;
 	t_cmd	*cmds;
+	int		cmd_n;
 	int		cmd_i;
+	t_cmd	*curr_cmd;
+	int		*pipes;
 	// could probably put main arguments in there for simplicity (e.g.: ac, av, envp)
 	// might not be necessary though, we'll see
 };
@@ -70,15 +73,17 @@ void	setup_pipex(t_pipex *pipex, int ac, char **av, char **envp);
 void	init_pipex_vars(t_pipex *pipex);
 void	check_inputs(int ac, char **av);
 void	get_paths(t_pipex *pipex, char **envp);
+void	get_files(t_pipex *pipex, int ac, char **av);
+// COMMANDS
 void	get_commands(t_pipex *pipex, int ac, char **av);
 t_cmd	*make_cmd(t_pipex *pipex, char *cmd_str);
 int		find_command(t_pipex *pipex, const char *cmd, char **path);
-void	get_files(t_pipex *pipex, int ac, char **av);
 
 // UTILS
 void	pipex_terminate(t_pipex *pipex, int mode); // could use some options too
 void	strarr_clear(char ***arr);
 void	cmdlst_clear(t_cmd **cmds);
+void	close_pipes(t_pipex *pipex);
 
 
 // TEST UTILS
