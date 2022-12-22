@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 20:00:33 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/22 12:47:38 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/22 22:40:05 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,10 @@ void	cmdlst_clear(t_cmd **cmds)
 	}
 }
 
+// Closes all pipe file descriptors previously opened in pipex_setup()
+// Note that some file descriptors might already be closed when this function
+// is called as the child processes sometimes closes the pipes to avoid loop
+// in execve
 void	close_pipes(t_pipex *pipex)
 {
 	const int	n = pipex->cmd_n * 2;
@@ -70,4 +74,34 @@ void	close_pipes(t_pipex *pipex)
 		while (i < n)
 			close(pipex->pipes[i++]);
 	}
+}
+
+// Uses dup2 to redirect the standard io to the correct files descriptors
+// depending on the index of the command being executed
+void	redirect_io(t_pipex *pipex, int	i)
+{
+	int	error;
+
+	error = 0;
+	if (i == 0)
+	{
+		error += dup2(pipex->fd_if, STDIN_FILENO) == -1;
+		error += dup2(pipex->pipes[1], STDOUT_FILENO) == -1;
+	}
+	else if (i == pipex->cmd_n - 1)
+	{
+		error += dup2(pipex->pipes[i * 2 - 2], STDIN_FILENO) == -1;
+		error += dup2(pipex->fd_of, STDOUT_FILENO) == -1;
+	}
+	else
+	{
+		error += dup2(pipex->pipes[i * 2 - 2], STDIN_FILENO) == -1;
+		error += dup2(pipex->pipes[i * 2 + 1], STDOUT_FILENO) == -1;
+	}
+	if (error != 0)
+	{
+		perror("redirect_io -> dup2");
+		pipex_terminate(pipex, EXIT_FAILURE);
+	}
+	close_pipes(pipex);
 }

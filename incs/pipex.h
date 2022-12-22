@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:54:48 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/22 12:47:08 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/22 22:40:45 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void	pipex_terminate(t_pipex *pipex, int mode); // could use some options too
 void	strarr_clear(char ***arr);
 void	cmdlst_clear(t_cmd **cmds);
 void	close_pipes(t_pipex *pipex);
+void	redirect_io(t_pipex *pipex, int i);
 
 
 // TEST UTILS // remoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooove later

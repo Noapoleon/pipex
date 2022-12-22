@@ -59,4 +59,6 @@ fclean:	clean
 
 re: fclean all
 
+normi:
+	norminette srcs | awk '{if ($$NF == "OK!") { print "\033[0;92m"$$0"\033[0m" } else if ($$NF == "Error!") { print "\033[0;91m"$$0"\033[0m" } else { print }}'
 .PHONY: all clean fclean re resrcs cleansrcs

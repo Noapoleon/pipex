@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:53:15 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/22 12:51:07 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/22 22:37:55 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,16 @@ int	main(int ac, char **av, char **envp)
 
 	errno = 0;
 	setup_pipex(&pipex, ac, av, envp);
-	while (pipex->curr_cmd)
+	while (pipex.curr_cmd)
 	{
-		child_process(pipex, envp);
-		++pipex->cmd_i;
-		pipex->curr_cmd = pipex->curr_cmd->next;
+		child_process(&pipex, envp);
+		++pipex.cmd_i;
+		pipex.curr_cmd = pipex.curr_cmd->next;
 	}
 	if (wait(NULL) == -1)
 	{
 		perror("do_all -> wait");
-		pipex_terminate(pipex, EXIT_FAILURE);
+		pipex_terminate(&pipex, EXIT_FAILURE);
 	}
 	pipex_terminate(&pipex, EXIT_SUCCESS);
 	return (0);

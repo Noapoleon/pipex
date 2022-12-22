@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 04:49:11 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/22 12:50:22 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/22 22:40:18 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,33 +26,6 @@ void	do_ls(void)
 	}
 }
 
-void	redirect_io(t_pipex *pipex, int	i)
-{
-	int	error;
-
-	error = 0;
-	if (i == 0)
-	{
-		error += dup2(pipex->fd_if, STDIN_FILENO) == -1;
-		error += dup2(pipex->pipes[1], STDOUT_FILENO) == -1;
-	}
-	else if (i == pipex->cmd_n - 1)
-	{
-		error += dup2(pipex->pipes[i * 2 - 2], STDIN_FILENO) == -1;
-		error += dup2(pipex->fd_of, STDOUT_FILENO) == -1;
-	}
-	else
-	{
-		error += dup2(pipex->pipes[i * 2 - 2], STDIN_FILENO) == -1;
-		error += dup2(pipex->pipes[i * 2 + 1], STDOUT_FILENO) == -1;
-	}
-	if (error != 0)
-	{
-		perror("redirect_io -> dup2");
-		pipex_terminate(pipex, EXIT_FAILURE);
-	}
-	close_pipes(pipex);
-}
 
 void	show_params(int ac, char **av)
 {
