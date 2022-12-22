@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   commands.c                                         :+:      :+:    :+:   */
+/*   setup2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 01:04:42 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/21 02:05:58 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/22 00:56:22 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,28 @@ int	find_command(t_pipex *pipex, const char *cmd, char **path)
 	if (*path == NULL)
 		return (1);
 	return (0);
+}
+
+// Opens pipes all at once, one for every command
+void	get_pipes(t_pipex *pipex)
+{
+	const int	n = pipex->cmd_n * 2;
+	int	i;
+
+	pipex->pipes = malloc(sizeof(int) * n);
+	if (pipex->pipes == NULL)
+	{
+		perror("get_pipes -> malloc");
+		pipex_terminate(pipex, EXIT_FAILURE);
+	}
+	i = 0;
+	while (i < n)
+	{
+		if (pipe(pipex->pipes + i) == -1)
+		{
+			perror("get_pipes -> pipe");
+			pipex_terminate(pipex, EXIT_FAILURE);
+		}
+		i += 2;
+	}
 }

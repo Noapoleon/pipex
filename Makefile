@@ -9,7 +9,7 @@ LIBFT	=	libft
 # Files
 SRCS	:=	pipex.c \
 			setup.c \
-			commands.c \
+			setup2.c \
 			utils.c \
 			test_utils.c # REMOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOVE LATER
 OBJS	:=	$(SRCS:.c=.o)

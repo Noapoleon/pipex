@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:54:48 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/21 04:05:13 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/22 01:01:59 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ void	init_pipex_vars(t_pipex *pipex);
 void	check_inputs(int ac, char **av);
 void	get_paths(t_pipex *pipex, char **envp);
 void	get_files(t_pipex *pipex, int ac, char **av);
-// COMMANDS
+void	get_pipes(t_pipex *pipex);
+// SETUP 2
 void	get_commands(t_pipex *pipex, int ac, char **av);
 t_cmd	*make_cmd(t_pipex *pipex, char *cmd_str);
 int		find_command(t_pipex *pipex, const char *cmd, char **path);
@@ -91,6 +92,6 @@ void	show_params(int ac, char **av);
 void	show_envp(char **envp);
 void	show_pipex_state(t_pipex *pipex);
 void	do_ls(void);
-void	do_all(t_pipex *pipex, int ac, char **envp);
+void	do_all(t_pipex *pipex, char **envp);
 
 #endif

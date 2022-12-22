@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 04:49:11 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/21 04:14:07 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/22 01:01:54 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	redirect_io(t_pipex *pipex, int	i)
 }
 void	child_process(t_pipex *pipex, char **envp)
 {
+	const t_cmd	*curr = pipex->curr_cmd;
 	pid_t	pid;
 
 	pid = fork();
@@ -74,8 +75,9 @@ void	child_process(t_pipex *pipex, char **envp)
 	}
 }
 
-void	do_all(t_pipex *pipex, int ac, char **envp)
+void	do_all(t_pipex *pipex, char **envp)
 {
+	pipex->curr_cmd = pipex->cmds;
 	while (pipex->curr_cmd)
 	{
 		child_process(pipex, envp);
@@ -88,7 +90,6 @@ void	do_all(t_pipex *pipex, int ac, char **envp)
 		pipex_terminate(pipex, EXIT_FAILURE);
 	}
 	pipex_terminate(pipex, EXIT_SUCCESS);
-		// increment cmd_i here instead (maybe bcoz otherwise the incremented value will only be in the child process)
 }
 
 //void	do_all(t_pipex *pipex, int ac, char **envp)

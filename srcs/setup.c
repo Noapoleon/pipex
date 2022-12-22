@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 17:46:01 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/21 02:59:31 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/22 00:52:19 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	setup_pipex(t_pipex *pipex, int ac, char **av, char **envp)
 	get_paths(pipex, envp);
 	get_commands(pipex, ac, av);
 	get_files(pipex, ac, av);
-	get_pipes(pipex, ac);
+	get_pipes(pipex);
 }
 
 // Prints correct usage if input is bad
@@ -60,7 +60,7 @@ void	init_pipex_vars(t_pipex *pipex)
 	pipex->cmds = NULL;
 	pipex->cmd_n = 0;
 	pipex->cmd_i = 0;
-	pipex->curr = NULL;
+	pipex->curr_cmd = NULL;
 	pipex->pipes = NULL;
 }
 
@@ -111,26 +111,5 @@ void	get_files(t_pipex *pipex, int ac, char **av)
 	{
 		perror("get_files -> open");
 		pipex_terminate(pipex, EXIT_FAILURE);
-	}
-}
-
-// 
-void	get_pipes(t_pipex *pipex, int ac)
-{
-	int	i;
-
-	pipex->pipes = malloc(sizeof(int) * (pipex->cmd_n * 2));
-	if (pipex->pipes == NULL)
-	{
-		perror("get_pipes -> malloc");
-		pipex_terminate(pipex, EXIT_FAILURE);
-	}
-	i = 0;
-	while (i < cmd_n)
-	{
-		if (pipe(pipex->pipes[i]) == -1)
-		{
-			perror("get_pipes -> pipe");
-			pipex_terminate(pipex);
 	}
 }
