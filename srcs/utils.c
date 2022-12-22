@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 20:00:33 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/22 00:58:03 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/22 12:47:38 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	cmdlst_clear(t_cmd **cmds)
 void	close_pipes(t_pipex *pipex)
 {
 	const int	n = pipex->cmd_n * 2;
-	int i;
+	int			i;
 
 	if (pipex->pipes)
 	{

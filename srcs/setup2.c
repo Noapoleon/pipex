@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 01:04:42 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/22 00:56:22 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/22 13:03:44 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 // Parses commands from main arguments
 void	get_commands(t_pipex *pipex, int ac, char **av)
 {
-	int	i;
-	t_cmd **curr;
+	int		i;
+	t_cmd	**curr;
 
 	i = 2 + (ft_strncmp(av[1], HEREDOC, ft_strlen(HEREDOC) + 1) == 0);
 	curr = &pipex->cmds;
@@ -28,6 +28,7 @@ void	get_commands(t_pipex *pipex, int ac, char **av)
 		curr = &(*curr)->next;
 	}
 	pipex->cmd_n = ac - 3; // change for heredoc
+	pipex->curr_cmd = pipex->cmds;
 }
 
 t_cmd	*make_cmd(t_pipex *pipex, char *cmd_str)
@@ -54,7 +55,7 @@ t_cmd	*make_cmd(t_pipex *pipex, char *cmd_str)
 int	find_command(t_pipex *pipex, const char *cmd, char **path)
 {
 	char	*slashed;
-	int			i;
+	int		i;
 
 	slashed = ft_strjoin("/", cmd);
 	if (slashed == NULL)
@@ -79,7 +80,7 @@ int	find_command(t_pipex *pipex, const char *cmd, char **path)
 void	get_pipes(t_pipex *pipex)
 {
 	const int	n = pipex->cmd_n * 2;
-	int	i;
+	int			i;
 
 	pipex->pipes = malloc(sizeof(int) * n);
 	if (pipex->pipes == NULL)

@@ -6,16 +6,15 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 17:46:01 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/22 00:52:19 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/22 13:04:19 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-//
+// Prepares all pipex variables and opens files for proper pipex processing
 void	setup_pipex(t_pipex *pipex, int ac, char **av, char **envp)
 {
-	(void)envp;
 	check_inputs(ac, av);
 	init_pipex_vars(pipex);
 	get_paths(pipex, envp);
@@ -29,8 +28,8 @@ void	check_inputs(int ac, char **av)
 {
 	int	i;
 
-	if (ac < 5 || (ac < 6 && ac >= 2 &&
-		ft_strncmp(av[1], HEREDOC, ft_strlen(HEREDOC) + 1) == 0))
+	if (ac < 5 || (ac < 6 && ac >= 2
+			&& ft_strncmp(av[1], HEREDOC, ft_strlen(HEREDOC) + 1) == 0))
 	{
 		ft_printf(USAGE_N);
 		ft_printf(USAGE_CMD);
@@ -106,7 +105,7 @@ void	get_files(t_pipex *pipex, int ac, char **av)
 		if_index = 1;
 	pipex->fd_if = open(av[if_index], O_RDONLY);
 	pipex->fd_of = open(av[ac - 1], O_CREAT | O_TRUNC | O_WRONLY,
-		S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP); // check if this is the correct way later
+			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP); // check if this is the correct way later
 	if (pipex->fd_if == -1 || pipex->fd_of == -1)
 	{
 		perror("get_files -> open");
