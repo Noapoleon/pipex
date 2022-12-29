@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 01:04:42 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/22 13:03:44 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/29 19:31:25 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ void	get_commands(t_pipex *pipex, int ac, char **av)
 	int		i;
 	t_cmd	**curr;
 
-	i = 2 + (ft_strncmp(av[1], HEREDOC, ft_strlen(HEREDOC) + 1) == 0);
+	if (ft_memcmp(av[1], HEREARG, ft_strlen(HEREARG) + 1) == 0)
+		pipex->heredoc = 1;
+	i = 2 + pipex->heredoc;
 	curr = &pipex->cmds;
 	while (i <= ac - 2)
 	{
@@ -27,7 +29,7 @@ void	get_commands(t_pipex *pipex, int ac, char **av)
 			pipex_terminate(pipex, EXIT_FAILURE);
 		curr = &(*curr)->next;
 	}
-	pipex->cmd_n = ac - 3; // change for heredoc
+	pipex->cmd_n = ac - 3 - pipex->heredoc;
 	pipex->curr_cmd = pipex->cmds;
 }
 
@@ -98,4 +100,43 @@ void	get_pipes(t_pipex *pipex)
 		}
 		i += 2;
 	}
+}
+
+// Reads standard input in a loop until a limiter is found
+void	make_heredoc(t_pipex *pipex, int ac, char **av)
+{
+	const int	len_limiter = ft_strlen(av[2]);
+	int			fd;
+	char		*line;
+
+	fd = open(HEREPATH, O_CREAT | O_TRUNC | O_WRONLY,
+		S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+	if (fd == -1)
+	{
+		perror("make_heredoc -> open");
+		pipex_terminate(pipex, EXIT_FAILURE);
+	}
+	while (gnl_w(STDIN_FILENO, &line) != -1)
+	{
+		if (ft_memcmp(av[2], line, len_limiter) == 0
+			&& (line[len_limiter] == '\0' || line[len_limiter] == '\n'))
+		{
+			free(line);
+			break;
+		}
+		write(fd, line, ft_strlen(line));
+		free(line);
+	}
+	close(fd);
+	pipex->fd_if = open(HEREPATH, O_RDONLY);
+	pipex->fd_of = open(av[ac - 1], O_CREAT | O_APPEND | O_WRONLY,
+			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+	// testing input
+//	printf("testing input:\n");
+//	while (gnl_w(pipex->fd_if, &line) != -1)
+//	{
+//		printf("%s", line);
+//		free(line);
+//	}
+//	printf("testing input end!!!\n");
 }

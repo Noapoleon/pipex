@@ -24,6 +24,7 @@ INTERROGATIONS:
 		  But I still need to not segfault (fini le truc d'abord gros con)
 	- [IMP] what does process permissions and user permissions have to do with this project ??
 	- is 2 really the minimum number of functions for a pipe?
+	- should i protect read and writes?
 
 
 DEBUG:

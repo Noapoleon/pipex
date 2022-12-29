@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:54:48 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/22 22:40:45 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/29 19:38:43 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@
 // wait, waitpid
 # include <sys/wait.h>
 
-# define HEREDOC	"here_doc"
+# define HEREARG	"here_doc"
+# define HEREPATH	".tmp_heredoc"
 
 // USAGE
 # define USAGE_N	"Usage: ./pipex <INPUT_FILE> "
@@ -62,6 +63,7 @@ struct s_pipex
 	int		cmd_i;
 	t_cmd	*curr_cmd;
 	int		*pipes;
+	int		heredoc;
 };
 
 // PIPEX
@@ -78,6 +80,7 @@ void	get_commands(t_pipex *pipex, int ac, char **av);
 t_cmd	*make_cmd(t_pipex *pipex, char *cmd_str);
 int		find_command(t_pipex *pipex, const char *cmd, char **path);
 void	get_pipes(t_pipex *pipex);
+void	make_heredoc(t_pipex *pipex, int ac, char **av);
 
 // UTILS
 void	pipex_terminate(t_pipex *pipex, int mode); // could use some options too

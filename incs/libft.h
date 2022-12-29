@@ -6,7 +6,7 @@
 /*   By: nlegrand <nlegrand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 17:48:35 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/11/25 15:50:57 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/29 17:28:59 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ char	*make_line(t_line **line, int len);
 void	split_buf_rest(char *tmpbuf, char *buf);
 void	clear_line(t_line **line);
 char	*get_endl(char *buf);
+int		gnl_w(int fd, char **line);
 
 // -----------------------//
 //        FT_PRINTF       //

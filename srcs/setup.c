@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 17:46:01 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/22 13:04:19 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/29 19:38:55 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	check_inputs(int ac, char **av)
 	int	i;
 
 	if (ac < 5 || (ac < 6 && ac >= 2
-			&& ft_strncmp(av[1], HEREDOC, ft_strlen(HEREDOC) + 1) == 0))
+			&& ft_strncmp(av[1], HEREARG, ft_strlen(HEREARG) + 1) == 0))
 	{
 		ft_printf(USAGE_N);
 		ft_printf(USAGE_CMD);
@@ -61,6 +61,7 @@ void	init_pipex_vars(t_pipex *pipex)
 	pipex->cmd_i = 0;
 	pipex->curr_cmd = NULL;
 	pipex->pipes = NULL;
+	pipex->heredoc = 0;
 }
 
 // Uses main's argument envp to get PATH variable
@@ -88,24 +89,14 @@ void	get_paths(t_pipex *pipex, char **envp)
 // Open input and output files
 void	get_files(t_pipex *pipex, int ac, char **av)
 {
-	int	if_index;
-
-	// When heredoc there's probably no need to give an index at all
-	// Just create the output file and work on that directly
-	// or something like that
-	// Or maybe the output file will be the pipe file or something
-	if (ft_strncmp(HEREDOC, av[1], ft_strlen(HEREDOC) + 1) == 0)
-	{
-		if_index = -69; // do proper logic for heredoc later
-		ft_printf("here_doc logic not implemented yet!\n");
-		pipex_terminate(pipex, EXIT_SUCCESS);
-		// get_heredoc() or something
-	}
+	if (pipex->heredoc)
+		make_heredoc(pipex, ac, av);
 	else
-		if_index = 1;
-	pipex->fd_if = open(av[if_index], O_RDONLY);
-	pipex->fd_of = open(av[ac - 1], O_CREAT | O_TRUNC | O_WRONLY,
-			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP); // check if this is the correct way later
+	{
+		pipex->fd_if = open(av[1], O_RDONLY);
+		pipex->fd_of = open(av[ac - 1], O_CREAT | O_TRUNC | O_WRONLY,
+			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+	}
 	if (pipex->fd_if == -1 || pipex->fd_of == -1)
 	{
 		perror("get_files -> open");

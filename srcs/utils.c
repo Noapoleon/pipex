@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 20:00:33 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/22 22:40:05 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/29 18:57:47 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ void	pipex_terminate(t_pipex *pipex, int exit_mode)
 	close(pipex->fd_if);
 	close(pipex->fd_of);
 	close_pipes(pipex); // that IS useful in some cases (init errors) but I'm not sure if it causes issues (investigate)
+//	close(pipex->heredoc);
+//	if (pipex->heredoc != -1)
+//		unlink(HEREFILE);
+	unlink(HEREPATH);
 	exit(exit_mode);
 }
 
