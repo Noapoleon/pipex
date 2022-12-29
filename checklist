@@ -42,3 +42,4 @@ THINK ABOUT IMPLEMENTING:
 	  closed like fildes[2]
 	- put pipe in struct and make function to close both pipes in case of error
 	  (or just put it in pipex_terminate()
+	- heredoc should append not truncate
