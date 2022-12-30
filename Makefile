@@ -28,6 +28,8 @@ RM	=	rm -rf
 
 all: $(NAME)
 
+bonus: all
+
 $(NAME): $(LIBDIR)/libft.a $(OBJS)
 	$(CC) $(DEBUG) $(CFLAGS) $(OBJS) $(CLIBS) -o $(NAME)
 
@@ -62,4 +64,4 @@ re: fclean all
 norm:
 	norminette $(SRCS) $(INCDIR) | awk '{if ($$NF == "OK!") { print "\033[0;92m"$$0"\033[0m" } else if ($$NF == "Error!") { print "\033[0;91m"$$0"\033[0m" } else { print }}'
 
-.PHONY: all clean fclean re resrcs cleansrcs
+.PHONY: all bonus clean fclean re resrcs cleansrcs
