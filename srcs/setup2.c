@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 01:04:42 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/30 11:55:54 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/30 12:08:07 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	make_heredoc(t_pipex *pipex, int ac, char **av)
 		perror("make_heredoc -> open");
 		pipex_terminate(pipex, EXIT_FAILURE);
 	}
-	while (gnl_w(STDIN_FILENO, &line) != -1)
+	while (ft_printf("[pipex] > ") && gnl_w(STDIN_FILENO, &line) != -1)
 	{
 		if (ft_memcmp(av[2], line, len_limiter) == 0
 			&& (line[len_limiter] == '\0' || line[len_limiter] == '\n'))

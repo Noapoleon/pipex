@@ -10,10 +10,10 @@ BEFORE UPLOAD:
 	- FORBIDDEN FUNCTION CHECK WITH NM
 
 INTERROGATIONS:
-	- how does functions get called in c file
-	- does function validity need to be checked in the middle of the program
+	- [DONE] how does functions get called in c file
+	- [DONE] does function validity need to be checked in the middle of the program
 	  while performing the pipes or does it need to be done before
-	- how does creating, appending and overwriting files work?
+	- [DONE] how does creating, appending and overwriting files work?
 	- [IMP] what to do when empty string is given for function:
 		* empty strings will probably cause ac to not match the number of functions
 		  This would probably lead to segfault as loop goes out of scope
@@ -23,7 +23,7 @@ INTERROGATIONS:
 		  in between 2 pipes (e.g.: ls | | grep "truc" ----> makes an error)
 		  But I still need to not segfault (fini le truc d'abord gros con)
 	- [IMP] what does process permissions and user permissions have to do with this project ??
-	- is 2 really the minimum number of functions for a pipe?
+	- [DONE] is 2 really the minimum number of functions for a pipe?
 	- should i protect read and writes?
 
 
@@ -37,10 +37,18 @@ TESTING:
 	- find other tests and vulnerabilities for files
 
 THINK ABOUT IMPLEMENTING:
-	- when in a here_doc remove the O_TRUNC (maybe??? or at least according to
+	- [DONE] when in a here_doc remove the O_TRUNC (maybe??? or at least according to
 	  the subject '>>' should be used and not '>'
-	- proper way for redirect_io because right now in do_all some stuff isn't
+	- [DONE] proper way for redirect_io because right now in do_all some stuff isn't
 	  closed like fildes[2]
-	- put pipe in struct and make function to close both pipes in case of error
+	- [DONE] put pipe in struct and make function to close both pipes in case of error
 	  (or just put it in pipex_terminate()
-	- heredoc should append not truncate
+	- [DONE] heredoc should append not truncate
+	- if parsing error occured don't create file, but also don't unlink a file that already existed
+	  meaning the output file should be created at the end
+	- if command errror then file is created and truncated
+	- last pipe can have no command after itself
+	- first pipe can have no command before itself (just file name)
+	- heredoc can have no command at all (fuck you), actually so can the normal
+	  thing if i input something like this: < checklist2 > real5
+	  not sure that this actually is part of the assignment
