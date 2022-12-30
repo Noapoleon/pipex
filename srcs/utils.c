@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 20:00:33 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/29 18:57:47 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/30 10:36:22 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@ void	pipex_terminate(t_pipex *pipex, int exit_mode)
 	cmdlst_clear(&pipex->cmds);
 	close(pipex->fd_if);
 	close(pipex->fd_of);
-	close_pipes(pipex); // that IS useful in some cases (init errors) but I'm not sure if it causes issues (investigate)
-//	close(pipex->heredoc);
-//	if (pipex->heredoc != -1)
-//		unlink(HEREFILE);
+	close_pipes(pipex);
 	unlink(HEREPATH);
 	exit(exit_mode);
 }
@@ -78,11 +75,12 @@ void	close_pipes(t_pipex *pipex)
 		while (i < n)
 			close(pipex->pipes[i++]);
 	}
+	free(pipex->pipes);
 }
 
 // Uses dup2 to redirect the standard io to the correct files descriptors
 // depending on the index of the command being executed
-void	redirect_io(t_pipex *pipex, int	i)
+void	redirect_io(t_pipex *pipex, int i)
 {
 	int	error;
 

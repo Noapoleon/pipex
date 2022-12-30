@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 17:46:01 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/29 19:38:55 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/30 10:29:38 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,7 @@ void	get_files(t_pipex *pipex, int ac, char **av)
 	else
 	{
 		pipex->fd_if = open(av[1], O_RDONLY);
-		pipex->fd_of = open(av[ac - 1], O_CREAT | O_TRUNC | O_WRONLY,
-			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+		pipex->fd_of = open(av[ac - 1], O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	}
 	if (pipex->fd_if == -1 || pipex->fd_of == -1)
 	{

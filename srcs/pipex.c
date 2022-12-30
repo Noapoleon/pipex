@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:53:15 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/29 19:38:51 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/30 10:27:14 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	main(int ac, char **av, char **envp)
 
 	errno = 0;
 	setup_pipex(&pipex, ac, av, envp);
-	//show_pipex_state(&pipex); // remove later
 	while (pipex.curr_cmd)
 	{
 		child_process(&pipex, envp);

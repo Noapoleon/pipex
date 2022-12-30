@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 01:04:42 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/29 19:31:25 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/30 10:36:05 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	find_command(t_pipex *pipex, const char *cmd, char **path)
 		free(*path);
 		*path = NULL;
 	}
+	free(slashed);
 	if (*path == NULL)
 		return (1);
 	return (0);
@@ -109,8 +110,7 @@ void	make_heredoc(t_pipex *pipex, int ac, char **av)
 	int			fd;
 	char		*line;
 
-	fd = open(HEREPATH, O_CREAT | O_TRUNC | O_WRONLY,
-		S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+	fd = open(HEREPATH, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (fd == -1)
 	{
 		perror("make_heredoc -> open");
@@ -122,21 +122,12 @@ void	make_heredoc(t_pipex *pipex, int ac, char **av)
 			&& (line[len_limiter] == '\0' || line[len_limiter] == '\n'))
 		{
 			free(line);
-			break;
+			break ;
 		}
 		write(fd, line, ft_strlen(line));
 		free(line);
 	}
 	close(fd);
 	pipex->fd_if = open(HEREPATH, O_RDONLY);
-	pipex->fd_of = open(av[ac - 1], O_CREAT | O_APPEND | O_WRONLY,
-			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
-	// testing input
-//	printf("testing input:\n");
-//	while (gnl_w(pipex->fd_if, &line) != -1)
-//	{
-//		printf("%s", line);
-//		free(line);
-//	}
-//	printf("testing input end!!!\n");
+	pipex->fd_of = open(av[ac - 1], O_CREAT | O_APPEND | O_WRONLY, 0644);
 }

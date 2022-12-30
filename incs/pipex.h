@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:54:48 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/29 19:38:43 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/30 10:39:38 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ struct s_pipex
 {
 	int		fd_if;
 	int		fd_of;
-	char 	**paths;
+	char	**paths;
 	t_cmd	*cmds;
 	int		cmd_n;
 	int		cmd_i;
@@ -88,13 +88,5 @@ void	strarr_clear(char ***arr);
 void	cmdlst_clear(t_cmd **cmds);
 void	close_pipes(t_pipex *pipex);
 void	redirect_io(t_pipex *pipex, int i);
-
-
-// TEST UTILS // remoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooove later
-//void	show_params(int ac, char **av);
-//void	show_envp(char **envp);
-//void	show_pipex_state(t_pipex *pipex);
-//void	do_ls(void);
-//void	do_all(t_pipex *pipex, char **envp);
 
 #endif
