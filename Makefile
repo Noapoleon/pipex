@@ -36,7 +36,7 @@ $(NAME): $(LIBDIR)/libft.a $(OBJS)
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR) $(LIBDIR)
 	$(CC) $(DEBUG) $(CFLAGS) $(CINCS) -c $< -o $@
 
-$(LIBDIR)/libft.a:
+$(LIBDIR)/libft.a: | $(LIBDIR)
 	make -C $(LIBFT)
 	cp $(LIBFT)/libft.a $(LIBDIR)/
 
@@ -64,4 +64,4 @@ re: fclean all
 norm:
 	norminette $(SRCS) $(INCDIR) | awk '{if ($$NF == "OK!") { print "\033[0;92m"$$0"\033[0m" } else if ($$NF == "Error!") { print "\033[0;91m"$$0"\033[0m" } else { print }}'
 
-.PHONY: all bonus clean fclean re resrcs cleansrcs
+.PHONY: all bonus clean fclean re resrcs cleansrcs norm
