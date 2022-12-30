@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:54:48 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/30 10:39:38 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/30 21:22:28 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@
 # define USAGE_CMD	"<cmd1 cmd2> ... <cmdn> <OUTPUT_FILE>\n"
 
 // ERROR MESSAGES
-# define E_EMPTY		"[PIPEX ERROR] Empty pipe argument.\n"
 # define E_NOPATH		"[PIPEX ERROR] No PATH variable in envp.\n"
 # define E_NOCMD		"[PIPEX ERROR] Command not found: %s\n"
 
@@ -79,6 +78,8 @@ void	get_files(t_pipex *pipex, int ac, char **av);
 void	get_commands(t_pipex *pipex, int ac, char **av);
 t_cmd	*make_cmd(t_pipex *pipex, char *cmd_str);
 int		find_command(t_pipex *pipex, const char *cmd, char **path);
+char	**split_cmdstr(char *cmdstr);
+// SETUP 3
 void	get_pipes(t_pipex *pipex);
 void	make_heredoc(t_pipex *pipex, int ac, char **av);
 

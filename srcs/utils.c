@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 20:00:33 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/30 11:29:27 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/30 21:19:35 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	pipex_terminate(t_pipex *pipex, int exit_mode)
 	close(pipex->fd_if);
 	close(pipex->fd_of);
 	close_pipes(pipex);
+	free(pipex->pipes);
 	unlink(HEREPATH);
 	exit(exit_mode);
 }
@@ -75,7 +76,6 @@ void	close_pipes(t_pipex *pipex)
 		while (i < n)
 			close(pipex->pipes[i++]);
 	}
-	free(pipex->pipes);
 }
 
 // Uses dup2 to redirect the standard io to the correct files descriptors

@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 17:46:01 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/30 12:21:03 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/30 21:18:50 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ void	setup_pipex(t_pipex *pipex, int ac, char **av, char **envp)
 // Prints correct usage if input is bad
 void	check_inputs(int ac, char **av)
 {
-	//int	i;
-
 	if (ac < 4 || (ac < 5 && ac >= 2
 			&& ft_strncmp(av[1], HEREARG, ft_strlen(HEREARG) + 1) == 0))
 	{
@@ -37,16 +35,6 @@ void	check_inputs(int ac, char **av)
 		ft_printf(USAGE_CMD);
 		exit(EXIT_FAILURE);
 	}
-	//i = 0;
-	//while (av[i])
-	//{
-	//	if (av[i][0] == '\0')
-	//	{
-	//		ft_dprintf(2, E_EMPTY);
-	//		exit(EXIT_FAILURE);
-	//	}
-	//	++i;
-	//}
 }
 
 // Initializes the pipex struct vars to their default values to allow use of

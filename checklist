@@ -46,7 +46,7 @@ THINK ABOUT IMPLEMENTING:
 	- [DONE] heredoc should append not truncate
 	- if parsing error occured don't create file, but also don't unlink a file that already existed
 	  meaning the output file should be created at the end
-	- if command errror then file is created and truncated
+	- [DONE] if command errror then file is created and truncated
 	- last pipe can have no command after itself
 	- first pipe can have no command before itself (just file name)
 	- heredoc can have no command at all (fuck you), actually so can the normal

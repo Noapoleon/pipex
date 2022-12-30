@@ -8,8 +8,9 @@ LIBFT	=	libft
 
 # Files
 SRCS	:=	pipex.c \
-			setup.c \
+			setup1.c \
 			setup2.c \
+			setup3.c \
 			utils.c
 OBJS	:=	$(SRCS:.c=.o)
 SRCS	:=	$(addprefix $(SRCDIR)/, $(SRCS))
@@ -28,10 +29,10 @@ RM	=	rm -rf
 all: $(NAME)
 
 $(NAME): $(LIBDIR)/libft.a $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(CLIBS) -o $(NAME)
+	$(CC) $(DEBUG) $(CFLAGS) $(OBJS) $(CLIBS) -o $(NAME)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR) $(LIBDIR)
-	$(CC) $(CFLAGS) $(CINCS) -c $< -o $@
+	$(CC) $(DEBUG) $(CFLAGS) $(CINCS) -c $< -o $@
 
 $(LIBDIR)/libft.a:
 	make -C $(LIBFT)
