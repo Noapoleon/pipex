@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 17:46:01 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/30 10:29:38 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/30 10:43:18 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	check_inputs(int ac, char **av)
 {
 	int	i;
 
-	if (ac < 5 || (ac < 6 && ac >= 2
+	if (ac < 4 || (ac < 5 && ac >= 2
 			&& ft_strncmp(av[1], HEREARG, ft_strlen(HEREARG) + 1) == 0))
 	{
 		ft_printf(USAGE_N);

@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 20:00:33 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/12/30 10:36:22 by nlegrand         ###   ########.fr       */
+/*   Updated: 2022/12/30 11:29:27 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,20 +86,13 @@ void	redirect_io(t_pipex *pipex, int i)
 
 	error = 0;
 	if (i == 0)
-	{
 		error += dup2(pipex->fd_if, STDIN_FILENO) == -1;
-		error += dup2(pipex->pipes[1], STDOUT_FILENO) == -1;
-	}
-	else if (i == pipex->cmd_n - 1)
-	{
-		error += dup2(pipex->pipes[i * 2 - 2], STDIN_FILENO) == -1;
-		error += dup2(pipex->fd_of, STDOUT_FILENO) == -1;
-	}
 	else
-	{
 		error += dup2(pipex->pipes[i * 2 - 2], STDIN_FILENO) == -1;
+	if (i == pipex->cmd_n - 1)
+		error += dup2(pipex->fd_of, STDOUT_FILENO) == -1;
+	else
 		error += dup2(pipex->pipes[i * 2 + 1], STDOUT_FILENO) == -1;
-	}
 	if (error != 0)
 	{
 		perror("redirect_io -> dup2");
