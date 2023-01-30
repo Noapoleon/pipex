@@ -53,4 +53,4 @@ THINK ABOUT IMPLEMENTING:
 	- heredoc can have no command at all (fuck you), actually so can the normal
 	  thing if i input something like this: < checklist2 > real5
 	  not sure that this actually is part of the assignment
-	- PRETTY SURE makefile doesn't work if libs directory doesn't already exist
+	- [DONE] PRETTY SURE makefile doesn't work if libs directory doesn't already exist
