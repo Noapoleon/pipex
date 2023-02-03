@@ -62,6 +62,22 @@ fclean:	clean
 re: fclean all
 
 norm:
-	norminette $(SRCS) $(INCDIR) | awk '{if ($$NF == "OK!") { print "\033[0;92m"$$0"\033[0m" } else if ($$NF == "Error!") { print "\033[0;91m"$$0"\033[0m" } else { print }}'
+	@echo "\033[44;97;1m               \033[0m"
+	@echo "\033[44;97;1m  LIBFT NORM:  \033[45;97;1m  \033[0m"
+	@echo "\033[44;97;1m               \033[45;97;1m  \033[0m"
+	@echo " \033[45;97;1m                \033[0m"
+	@norminette $(LIBFT) | awk '{if ($$NF == "OK!") { print "\033[0;92m"$$0"\033[0m" } else if ($$NF == "Error!") { print "\033[41;97;5;1m"$$0"\033[0m" } else { print }}'
+	@echo "\n"
+	@echo "\033[44;97;1m                 \033[0m"
+	@echo "\033[44;97;1m  SOURCES NORM:  \033[45;97;1m  \033[0m"
+	@echo "\033[44;97;1m                 \033[45;97;1m  \033[0m"
+	@echo " \033[45;97;1m                  \033[0m"
+	@norminette $(SRCDIR) | awk '{if ($$NF == "OK!") { print "\033[0;92m"$$0"\033[0m" } else if ($$NF == "Error!") { print "\033[41;97;5;1m"$$0"\033[0m" } else { print }}'
+	@echo "\n"
+	@echo "\033[44;97;1m                  \033[0m"
+	@echo "\033[44;97;1m  INCLUDES NORM:  \033[45;97;1m  \033[0m"
+	@echo "\033[44;97;1m                  \033[45;97;1m  \033[0m"
+	@echo " \033[45;97;1m                   \033[0m"
+	@norminette $(INCDIR) | awk '{if ($$NF == "OK!") { print "\033[0;92m"$$0"\033[0m" } else if ($$NF == "Error!") { print "\033[41;97;5;1m"$$0"\033[0m" } else { print }}'
 
 .PHONY: all bonus clean fclean re resrcs cleansrcs norm
