@@ -1,27 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/03 17:54:41 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/03 18:38:48 by nlegrand         ###   ########.fr       */
+/*   Created: 2023/02/03 17:55:06 by nlegrand          #+#    #+#             */
+/*   Updated: 2023/02/03 18:39:26 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "pipex.h"
 
-# include "libft.h"
-
-typedef struct s_pipex	t_pipex;
-
-struct s_pipex
+int	main(int ac, char **av, char **envp)
 {
-	char	*fd_if;
-	char	*fd_of;
-	int		n_cmd;
-};
+	t_pipex pip;
 
-#endif
+	setup_pipex(&pip, ac, av, envp);
+	return (0);
+}

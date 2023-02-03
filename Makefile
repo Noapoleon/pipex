@@ -7,11 +7,7 @@ LIBDIR	=	libs
 LIBFT	=	libft
 
 # Files
-SRCS	:=	pipex.c \
-			setup1.c \
-			setup2.c \
-			setup3.c \
-			utils.c
+SRCS	:=	pipex.c
 OBJS	:=	$(SRCS:.c=.o)
 SRCS	:=	$(addprefix $(SRCDIR)/, $(SRCS))
 OBJS	:=	$(addprefix $(OBJDIR)/, $(OBJS))
