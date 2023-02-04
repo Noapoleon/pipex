@@ -7,17 +7,21 @@ LIBDIR	=	libs
 LIBFT	=	libft
 
 # Files
-SRCS	:=	pipex.c
+SRCS	:=	pipex.c \
+			setup1.c \
+			setup2.c \
+			utils.c
 OBJS	:=	$(SRCS:.c=.o)
 SRCS	:=	$(addprefix $(SRCDIR)/, $(SRCS))
 OBJS	:=	$(addprefix $(OBJDIR)/, $(OBJS))
 
 # Compiler Options
-CC		=	cc
-CFLAGS	=	-Wall -Wextra -Werror
-CLIBS	=	-L./$(LIBDIR) -lft
-CINCS	=	-I./$(INCDIR)
-DEBUG	=	-g3 -gdwarf-4
+CC			=	cc
+CFLAGS		=	-Wall -Wextra -Werror
+CLIBS		=	-L./$(LIBDIR) -lft
+CINCS		=	-I./$(INCDIR)
+DEBUG		=	-g3 -gdwarf-4
+MALLOCATOR	=	-g
 
 # Other
 RM	=	rm -rf
@@ -27,10 +31,10 @@ all: $(NAME)
 bonus: all
 
 $(NAME): $(LIBDIR)/libft.a $(OBJS)
-	$(CC) $(DEBUG) $(CFLAGS) $(OBJS) $(CLIBS) -o $(NAME)
+	$(CC) $(MALLOCATOR) $(CFLAGS) $(OBJS) $(CLIBS) -o $(NAME)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR) $(LIBDIR)
-	$(CC) $(DEBUG) $(CFLAGS) $(CINCS) -c $< -o $@
+	$(CC) $(MALLOCATOR) $(CFLAGS) $(CINCS) -c $< -o $@
 
 $(LIBDIR)/libft.a: | $(LIBDIR)
 	make -C $(LIBFT)
@@ -76,4 +80,7 @@ norm:
 	@echo " \033[45;97;1m                   \033[0m"
 	@norminette $(INCDIR) | awk '{if ($$NF == "OK!") { print "\033[0;92m"$$0"\033[0m" } else if ($$NF == "Error!") { print "\033[41;97;5;1m"$$0"\033[0m" } else { print }}'
 
-.PHONY: all bonus clean fclean re resrcs cleansrcs norm
+malloc_test: $(OBJS)
+	$(CC) $(CFLAGS) -fsanitize=undefined -rdynamic -o $@ ${OBJS} $(CLIBS) -L. -lmallocator
+
+.PHONY: all bonus clean fclean re resrcs cleansrcs norm malloc_test

@@ -9,6 +9,7 @@ BEFORE UPLOAD:
 	- remove random ft_printf / printf calls
 	- FORBIDDEN FUNCTION CHECK WITH NM
 	- check makefile with libs and objs dirs
+	- [IMP] comment all functions
 
 INTERROGATIONS:
 	- [DONE] how does functions get called in c file
