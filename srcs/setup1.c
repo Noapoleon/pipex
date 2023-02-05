@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 08:25:49 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/04 15:49:07 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/05 15:43:27 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,6 @@ static void	init_pipex_vars(t_pipex *pip, int ac, char **av)
 // Sets up variables in pipex struct, safely allocates everything
 void	setup_pipex(t_pipex *pip, int ac, char **av, char **envp)
 {
-	(void)envp; // remove later
-	(void)ac; // remove later
-	(void)av; // remove later
 	check_input(ac, av);
 	init_pipex_vars(pip, ac, av);
 	make_cmds(pip, av, envp);

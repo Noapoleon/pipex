@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 11:35:38 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/04 15:58:03 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/05 16:14:46 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 static void	get_cmd(t_cmd *cmd, char *cmdstr)
 {
+	//char	**splitted;
+
+	if (cmdstr == NULL) // REMOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOVE LATER
+		ft_printf("we got a problem huston\n");
+
+	//splitted = ft_split(cmdstr, ' ');
 	cmd->args = ft_split(cmdstr, ' ');
 }
 
@@ -33,7 +39,7 @@ void	make_cmds(t_pipex *pip, char **av, char **envp)
 	while (i < pip->n_cmd)
 	{
 		ft_printf("cmd #%d\n", i);
-		get_cmd(&pip->cmds[i], av[2 + i + pip->heredoc]);
+		get_cmd(&pip->cmds[i], av[2 + pip->heredoc + i], envp);
 		++i;
 	}
 }
