@@ -9,7 +9,7 @@ LIBFT	=	libft
 # Files
 SRCS	:=	pipex.c \
 			setup1.c \
-			setup2.c \
+			commands.c \
 			utils.c
 OBJS	:=	$(SRCS:.c=.o)
 SRCS	:=	$(addprefix $(SRCDIR)/, $(SRCS))

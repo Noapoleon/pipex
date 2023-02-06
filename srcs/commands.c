@@ -1,46 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   setup2.c                                           :+:      :+:    :+:   */
+/*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 11:35:38 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/05 16:14:46 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/06 11:19:11 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static void	get_cmd(t_cmd *cmd, char *cmdstr)
-{
-	//char	**splitted;
-
-	if (cmdstr == NULL) // REMOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOVE LATER
-		ft_printf("we got a problem huston\n");
-
-	//splitted = ft_split(cmdstr, ' ');
-	cmd->args = ft_split(cmdstr, ' ');
-}
-
-void	make_cmds(t_pipex *pip, char **av, char **envp)
+// Splits all command strings and stores them in an array of t_cmd
+void	make_cmds(t_pipex *pip, char **av)
 {
 	int	i;
 
-	(void)av;
-	(void)envp;
-	pip->cmds = malloc(sizeof(t_cmd) * pip->n_cmd);
+	pip->cmds = ft_calloc(pip->cmd_count, sizeof(t_cmd));
 	if (pip->cmds == NULL)
 	{
-		perror("make_cmds -> malloc");
+		perror("[PIPEX ERROR] make_cmds > malloc");
 		pipex_terminate(pip, EXIT_FAILURE);
 	}
 	i = 0;
-	while (i < pip->n_cmd)
+	while (i < pip->cmd_count)
 	{
-		ft_printf("cmd #%d\n", i);
-		get_cmd(&pip->cmds[i], av[2 + pip->heredoc + i], envp);
+		make_cmd(pip, &pip->cmds[i], av[2 + pip->heredoc + i]);
 		++i;
 	}
 }
 
+// Splits the command string and puts it into the struct
+void	make_cmd(t_pipex *pip, t_cmd *cmd, char *cmdstr)
+{
+	cmd->path = NULL;
+	cmd->args = ft_split(cmdstr, ' ');
+	if (cmd->args == NULL)
+	{
+		perror("[PIPEX ERROR] make_cmds -> ft_split");
+		pipex_terminate(pip, EXIT_FAILURE);
+	}
+}

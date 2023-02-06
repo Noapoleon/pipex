@@ -6,7 +6,7 @@
 /*   By: nlegrand <nlegrand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 22:12:26 by nlegrand          #+#    #+#             */
-/*   Updated: 2022/11/09 14:38:23 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/06 13:07:55 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ static int	cpy_words(char **dest, const char *s, char c)
 			dest[i] = (char *)malloc(sizeof(char) * (len + 1));
 			if (dest[i] == NULL)
 			{
-				while (i)
-					free(dest[i--]);
+				while (i--)
+					free(dest[i]);
 				return (-1);
 			}
 			ft_strlcpy(dest[i++], s, len + 1);

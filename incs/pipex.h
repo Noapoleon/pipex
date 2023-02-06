@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 17:54:41 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/04 15:49:01 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/06 11:19:12 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@
 # define USAGE_HEREDOC	"   or: %s here_doc <LIMITER> %s\n"
 # define USAGE_CMDS		"<cmd1> <cmd2> ... [cmdn] <OUTPUT_FILE>"
 
-# define HEREDOC "here_doc"
+# define PE_NOPATH	"[PIPEX ERROR] No path variable found.\n"
+
+# define HEREDOC	"here_doc"
+# define PATH		"PATH="
 
 typedef struct s_pipex	t_pipex;
 typedef struct s_cmd	t_cmd;
@@ -37,19 +40,31 @@ struct s_cmd
 };
 struct s_pipex
 {
-	char	*i_file;
-	char	*o_file;
+	char	*input_file;
+	char	*output_file;
+	char	**paths;
 	int		heredoc;
-	int		n_cmd;
+	int		cmd_count;
 	t_cmd	*cmds;
+	int		*pipes;
 };
 
 // setup1.c
 void	setup_pipex(t_pipex *pip, int ac, char **av, char **envp);
-// setup2.c
-void	make_cmds(t_pipex *pip, char **av, char **envp);
+void	check_input(int ac, char **av);
+void	init_pipex_vars(t_pipex *pip, int ac, char **av);
+void	get_paths(t_pipex *pip, char **envp);
+void	open_pipes(t_pipex *pip);
+
+// commands.c
+void	make_cmds(t_pipex *pip, char **av);
+void	make_cmd(t_pipex *pip, t_cmd *cmd, char *cmdstr);
+//void	find_cmd(
 
 // utils.c
 void	pipex_terminate(t_pipex *pip, int exit_mode);
+void	free_cmds(t_pipex *pip);
+void	strarr_clear(char **arr);
+void	close_pipes(t_pipex *pip);
 
 #endif
