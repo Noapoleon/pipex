@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 17:54:41 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/06 11:19:12 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/06 15:33:08 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define USAGE_HEREDOC	"   or: %s here_doc <LIMITER> %s\n"
 # define USAGE_CMDS		"<cmd1> <cmd2> ... [cmdn] <OUTPUT_FILE>"
 
+# define PE_NOCMD	"[PIPEX ERROR] Command not found.\n"
 # define PE_NOPATH	"[PIPEX ERROR] No path variable found.\n"
 
 # define HEREDOC	"here_doc"
@@ -49,6 +50,9 @@ struct s_pipex
 	int		*pipes;
 };
 
+// pipex.c
+void	child_process(t_pipex *pip, int	index);
+
 // setup1.c
 void	setup_pipex(t_pipex *pip, int ac, char **av, char **envp);
 void	check_input(int ac, char **av);
@@ -59,7 +63,7 @@ void	open_pipes(t_pipex *pip);
 // commands.c
 void	make_cmds(t_pipex *pip, char **av);
 void	make_cmd(t_pipex *pip, t_cmd *cmd, char *cmdstr);
-//void	find_cmd(
+int		find_cmd(t_pipex *pip, t_cmd *cmd);
 
 // utils.c
 void	pipex_terminate(t_pipex *pip, int exit_mode);

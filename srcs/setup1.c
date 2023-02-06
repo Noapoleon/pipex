@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 08:25:49 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/06 12:39:05 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/06 14:15:38 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	open_pipes(t_pipex *pip)
 	{
 		if (pipe(pip->pipes + i) == -1)
 		{
-			perror("PIPEX_ERROR] get_pipes > pipe");
+			perror("[PIPEX_ERROR] get_pipes > pipe");
 			pipex_terminate(pip, EXIT_FAILURE);
 		}
 		i += 2;
