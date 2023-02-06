@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 17:54:41 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/06 15:33:08 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/06 16:30:33 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ struct s_pipex
 {
 	char	*input_file;
 	char	*output_file;
+	int		fd_if;
+	int		fd_of;
 	char	**paths;
 	int		heredoc;
 	int		cmd_count;
@@ -51,7 +53,7 @@ struct s_pipex
 };
 
 // pipex.c
-void	child_process(t_pipex *pip, int	index);
+void	child_process(t_pipex *pip, int	index, char **envp);
 
 // setup1.c
 void	setup_pipex(t_pipex *pip, int ac, char **av, char **envp);
@@ -70,5 +72,7 @@ void	pipex_terminate(t_pipex *pip, int exit_mode);
 void	free_cmds(t_pipex *pip);
 void	strarr_clear(char **arr);
 void	close_pipes(t_pipex *pip);
+void	redirect_io(t_pipex *pip, int i);
+int		open_io_file(t_pipex *pip, int index);
 
 #endif

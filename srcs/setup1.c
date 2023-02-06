@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 08:25:49 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/06 14:15:38 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/06 16:03:08 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	init_pipex_vars(t_pipex *pip, int ac, char **av)
 	else
 		pip->input_file = NULL;
 	pip->output_file = av[ac - 1];
+	pip->fd_if = -2;
+	pip->fd_of = -2;
 	pip->paths = NULL;
 	pip->cmds = NULL;
 	pip->pipes = NULL;
