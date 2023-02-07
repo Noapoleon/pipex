@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 11:35:38 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/06 15:05:33 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/07 20:11:15 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	special_cmd_path(t_pipex *pip, t_cmd *cmd)
 
 int	find_cmd(t_pipex *pip, t_cmd *cmd)
 {
-	int	i;
+	int		i;
 	char	*slashed;
 
 	if (special_cmd_path(pip, cmd))
@@ -83,5 +83,5 @@ int	find_cmd(t_pipex *pip, t_cmd *cmd)
 			return (free(slashed), 0);
 		free(cmd->path);
 	}
-	return ((cmd->path = NULL), free(slashed), -1); // command not found args[0]
+	return ((cmd->path = NULL), free(slashed), -1);
 }

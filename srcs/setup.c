@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   setup1.c                                           :+:      :+:    :+:   */
+/*   setup.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 08:25:49 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/06 16:03:08 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/07 20:06:05 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,15 @@ void	init_pipex_vars(t_pipex *pip, int ac, char **av)
 	pip->heredoc = ft_strncmp(HEREDOC, av[1], ft_strlen(HEREDOC) + 1) == 0;
 	pip->cmd_count = ac - 3 - pip->heredoc;
 	if (!pip->heredoc)
+	{
 		pip->input_file = av[1];
+		pip->limiter = NULL;
+	}
 	else
+	{
 		pip->input_file = NULL;
+		pip->limiter = av[2];
+	}
 	pip->output_file = av[ac - 1];
 	pip->fd_if = -2;
 	pip->fd_of = -2;

@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 17:54:41 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/06 16:30:33 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/07 20:14:12 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,11 @@
 # define USAGE_HEREDOC	"   or: %s here_doc <LIMITER> %s\n"
 # define USAGE_CMDS		"<cmd1> <cmd2> ... [cmdn] <OUTPUT_FILE>"
 
-# define PE_NOCMD	"[PIPEX ERROR] Command not found.\n"
+# define PE_NOCMD	"[PIPEX ERROR] %s: Command not found.\n"
 # define PE_NOPATH	"[PIPEX ERROR] No path variable found.\n"
 
 # define HEREDOC	"here_doc"
+# define HEREPATH	".tmp_heredoc"
 # define PATH		"PATH="
 
 typedef struct s_pipex	t_pipex;
@@ -47,13 +48,14 @@ struct s_pipex
 	int		fd_of;
 	char	**paths;
 	int		heredoc;
+	char	*limiter;
 	int		cmd_count;
 	t_cmd	*cmds;
 	int		*pipes;
 };
 
 // pipex.c
-void	child_process(t_pipex *pip, int	index, char **envp);
+void	child_process(t_pipex *pip, int index, char **envp);
 
 // setup1.c
 void	setup_pipex(t_pipex *pip, int ac, char **av, char **envp);
@@ -67,12 +69,14 @@ void	make_cmds(t_pipex *pip, char **av);
 void	make_cmd(t_pipex *pip, t_cmd *cmd, char *cmdstr);
 int		find_cmd(t_pipex *pip, t_cmd *cmd);
 
-// utils.c
+// utils1.c
 void	pipex_terminate(t_pipex *pip, int exit_mode);
 void	free_cmds(t_pipex *pip);
 void	strarr_clear(char **arr);
 void	close_pipes(t_pipex *pip);
 void	redirect_io(t_pipex *pip, int i);
+// utils2.c
 int		open_io_file(t_pipex *pip, int index);
+void	make_heredoc(t_pipex *pipex); //haven't checked again
 
 #endif

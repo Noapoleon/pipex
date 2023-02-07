@@ -8,9 +8,10 @@ LIBFT	=	libft
 
 # Files
 SRCS	:=	pipex.c \
-			setup1.c \
+			setup.c \
 			commands.c \
-			utils.c
+			utils1.c \
+			utils2.c
 OBJS	:=	$(SRCS:.c=.o)
 SRCS	:=	$(addprefix $(SRCDIR)/, $(SRCS))
 OBJS	:=	$(addprefix $(OBJDIR)/, $(OBJS))
@@ -54,7 +55,7 @@ clean:
 	make clean -C $(LIBFT)
 	$(RM) $(OBJS)
 
-fclean:	clean
+fclean: clean
 	$(RM) $(LIBFT)/libft.a
 	$(RM) $(LIBDIR)/libft.a
 	$(RM) $(NAME)
