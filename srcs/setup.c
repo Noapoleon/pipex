@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 08:25:49 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/07 20:06:05 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/07 20:21:43 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void	get_paths(t_pipex *pip, char **envp)
 	}
 }
 
+// Opens the pipes with the pipe function, one pipe per command
 void	open_pipes(t_pipex *pip)
 {
 	int	i;

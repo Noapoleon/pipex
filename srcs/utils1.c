@@ -6,12 +6,13 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 11:36:36 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/07 20:13:01 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/07 20:19:08 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+// Frees and closes everything
 void	pipex_terminate(t_pipex *pip, int exit_mode)
 {
 	free_cmds(pip);
@@ -24,6 +25,7 @@ void	pipex_terminate(t_pipex *pip, int exit_mode)
 	exit(exit_mode);
 }
 
+// Frees commands struct attributes and the array itself
 void	free_cmds(t_pipex *pip)
 {
 	int	i;
@@ -54,6 +56,7 @@ void	strarr_clear(char **arr)
 	}
 }
 
+// Closes the pipes opened in the parent process
 void	close_pipes(t_pipex *pip)
 {
 	int	i;

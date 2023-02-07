@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 11:35:38 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/07 20:11:15 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/07 20:21:18 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void	make_cmd(t_pipex *pip, t_cmd *cmd, char *cmdstr)
 	}
 }
 
+// If the command path is local, absolute or non existant this function
+// will fill the command struct instead of find_command itself
 int	special_cmd_path(t_pipex *pip, t_cmd *cmd)
 {
 	int	i;
@@ -60,6 +62,8 @@ int	special_cmd_path(t_pipex *pip, t_cmd *cmd)
 	return (i);
 }
 
+// Joins the command name with the paths in the PATH variable to find the
+// executable
 int	find_cmd(t_pipex *pip, t_cmd *cmd)
 {
 	int		i;

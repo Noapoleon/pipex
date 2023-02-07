@@ -6,12 +6,13 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 17:14:01 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/07 20:10:22 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/07 20:22:19 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+// Opens the input or output file depending on the index given
 int	open_io_file(t_pipex *pip, int index)
 {
 	if (index == 0)
@@ -38,7 +39,8 @@ int	open_io_file(t_pipex *pip, int index)
 	return (0);
 }
 
-// Reads standard input in a loop until a limiter is found
+// Creates a temporary file and reads standard input in a loop until a limiter
+// is found
 void	make_heredoc(t_pipex *pip)
 {
 	const int	len_limiter = ft_strlen(pip->limiter);

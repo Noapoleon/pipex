@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 17:55:06 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/07 20:01:10 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/07 20:18:17 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	main(int ac, char **av, char **envp)
 	return (0);
 }
 
+// Forks the process and executes the commands with execve if in child process
 void	child_process(t_pipex *pip, int index, char **envp)
 {
 	pid_t	pid;
