@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 17:54:41 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/07 20:14:12 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/08 14:16:57 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "libft.h"
 # include <errno.h>
+# include <string.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <sys/stat.h>
@@ -26,8 +27,8 @@
 # define USAGE_HEREDOC	"   or: %s here_doc <LIMITER> %s\n"
 # define USAGE_CMDS		"<cmd1> <cmd2> ... [cmdn] <OUTPUT_FILE>"
 
-# define PE_NOCMD	"[PIPEX ERROR] %s: Command not found.\n"
-# define PE_NOPATH	"[PIPEX ERROR] No path variable found.\n"
+# define PE_NOCMD	"%s: command not found\n"
+# define PE_NOCMD	"%s: command not found\n"
 
 # define HEREDOC	"here_doc"
 # define HEREPATH	".tmp_heredoc"
@@ -42,8 +43,9 @@ struct s_cmd
 };
 struct s_pipex
 {
-	char	*input_file;
-	char	*output_file;
+	char	*name;
+	char	*in_file;
+	char	*out_file;
 	int		fd_if;
 	int		fd_of;
 	char	**paths;
@@ -52,10 +54,12 @@ struct s_pipex
 	int		cmd_count;
 	t_cmd	*cmds;
 	int		*pipes;
+	pid_t	last_pid;
+	int		ret;
 };
 
 // pipex.c
-void	child_process(t_pipex *pip, int index, char **envp);
+pid_t	child_process(t_pipex *pip, int index, char **envp);
 
 // setup1.c
 void	setup_pipex(t_pipex *pip, int ac, char **av, char **envp);
@@ -76,7 +80,7 @@ void	strarr_clear(char **arr);
 void	close_pipes(t_pipex *pip);
 void	redirect_io(t_pipex *pip, int i);
 // utils2.c
-int		open_io_file(t_pipex *pip, int index);
+void	open_io_file(t_pipex *pip, int index);
 void	make_heredoc(t_pipex *pipex); //haven't checked again
 
 #endif

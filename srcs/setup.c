@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 08:25:49 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/07 20:21:43 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/08 13:41:40 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,24 +39,27 @@ void	check_input(int ac, char **av)
 // Attributes that do need allocation are set to NULL
 void	init_pipex_vars(t_pipex *pip, int ac, char **av)
 {
+	pip->name = av[0];
 	pip->heredoc = ft_strncmp(HEREDOC, av[1], ft_strlen(HEREDOC) + 1) == 0;
 	pip->cmd_count = ac - 3 - pip->heredoc;
 	if (!pip->heredoc)
 	{
-		pip->input_file = av[1];
+		pip->in_file = av[1];
 		pip->limiter = NULL;
 	}
 	else
 	{
-		pip->input_file = NULL;
+		pip->in_file = NULL;
 		pip->limiter = av[2];
 	}
-	pip->output_file = av[ac - 1];
+	pip->out_file = av[ac - 1];
 	pip->fd_if = -2;
 	pip->fd_of = -2;
 	pip->paths = NULL;
 	pip->cmds = NULL;
 	pip->pipes = NULL;
+	pip->last_pid = 0;
+	pip->ret = 0;
 }
 
 // Finds the PATH variable in envp and splits it into an array of strings
@@ -73,8 +76,8 @@ void	get_paths(t_pipex *pip, char **envp)
 	}
 	if (envp[i] == NULL)
 	{
-		ft_dprintf(2, PE_NOPATH);
-		pipex_terminate(pip, EXIT_FAILURE);
+		pip->paths = NULL;
+		return ;
 	}
 	pip->paths = ft_split(envp[i] + ft_strlen(PATH), ':');
 	if (pip->paths == NULL)
@@ -92,7 +95,7 @@ void	open_pipes(t_pipex *pip)
 	pip->pipes = malloc(sizeof(int) * (pip->cmd_count * 2));
 	if (pip->pipes == NULL)
 	{
-		perror("[PIPEX ERROR] get_pipes > malloc");
+		perror("[PIPEX ERROR] open_pipes > malloc");
 		pipex_terminate(pip, EXIT_FAILURE);
 	}
 	i = 0;
@@ -100,7 +103,7 @@ void	open_pipes(t_pipex *pip)
 	{
 		if (pipe(pip->pipes + i) == -1)
 		{
-			perror("[PIPEX_ERROR] get_pipes > pipe");
+			perror("[PIPEX_ERROR] open_pipes > pipe");
 			pipex_terminate(pip, EXIT_FAILURE);
 		}
 		i += 2;

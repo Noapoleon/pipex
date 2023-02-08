@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 11:36:36 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/07 20:19:08 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/08 13:59:52 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,7 @@ void	redirect_io(t_pipex *pip, int i)
 		perror("[PIPEX ERROR] redirect_io > dup2");
 		pipex_terminate(pip, EXIT_FAILURE);
 	}
+	close(pip->fd_if);
+	close(pip->fd_of);
 	close_pipes(pip);
 }

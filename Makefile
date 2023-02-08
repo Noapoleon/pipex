@@ -19,6 +19,7 @@ OBJS	:=	$(addprefix $(OBJDIR)/, $(OBJS))
 # Compiler Options
 CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror
+#CFLAGS		=	-Wall -Wextra
 CLIBS		=	-L./$(LIBDIR) -lft
 CINCS		=	-I./$(INCDIR)
 DEBUG		=	-g3 -gdwarf-4
@@ -32,10 +33,10 @@ all: $(NAME)
 bonus: all
 
 $(NAME): $(LIBDIR)/libft.a $(OBJS)
-	$(CC) $(MALLOCATOR) $(CFLAGS) $(OBJS) $(CLIBS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(CLIBS) -o $(NAME)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR) $(LIBDIR)
-	$(CC) $(MALLOCATOR) $(CFLAGS) $(CINCS) -c $< -o $@
+	$(CC) $(CFLAGS) $(CINCS) -c $< -o $@
 
 $(LIBDIR)/libft.a: | $(LIBDIR)
 	make -C $(LIBFT)

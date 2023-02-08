@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 11:35:38 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/07 20:21:18 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/08 14:38:44 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ int	special_cmd_path(t_pipex *pip, t_cmd *cmd)
 	i = 0;
 	if (cmd->args[0] == NULL && ++i)
 		cmd->path = ft_strdup("");
-	else if ((cmd->args[0][0] == '/' || cmd->args[0][0] == '.') && ++i)
+	else if ((cmd->args[0][0] == '/' || cmd->args[0][0] == '.'
+			|| pip->paths == NULL) && ++i)
 		cmd->path = ft_strdup(cmd->args[0]);
 	if (i && cmd->path == NULL)
 	{
@@ -76,7 +77,7 @@ int	find_cmd(t_pipex *pip, t_cmd *cmd)
 		return (perror("[PIPEX ERROR] find_cmd > ft_strjoin (1)"),
 			pipex_terminate(pip, EXIT_FAILURE), -1);
 	i = 0;
-	while (pip->paths[i])
+	while (pip->paths && pip->paths[i])
 	{
 		cmd->path = ft_strjoin(pip->paths[i++], slashed);
 		if (cmd->path == NULL)

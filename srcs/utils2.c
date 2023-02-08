@@ -6,37 +6,28 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 17:14:01 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/07 20:22:19 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/08 13:35:37 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 // Opens the input or output file depending on the index given
-int	open_io_file(t_pipex *pip, int index)
+void	open_io_file(t_pipex *pip, int index)
 {
-	if (index == 0)
+	if (index == 0 && pip->heredoc)
+		make_heredoc(pip);
+	else if (index == 0)
+		pip->fd_if = open(pip->in_file, O_RDONLY);
+	else if (index == pip->cmd_count -1 && pip->heredoc)
+		pip->fd_of = open(pip->out_file, O_CREAT | O_APPEND | O_WRONLY, 0644);
+	else if (index == pip->cmd_count - 1)
+		pip->fd_of = open(pip->out_file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	if (pip->fd_if == -1 || pip->fd_of == -1)
 	{
-		if (pip->heredoc)
-			make_heredoc(pip);
-		else
-			pip->fd_if = open(pip->input_file, O_RDONLY);
-		if (pip->fd_if == -1)
-		{
-			perror("[PIPEX ERROR] open_io_file > open input");
-			pipex_terminate(pip, EXIT_FAILURE);
-		}
+		perror(pip->name);
+		pipex_terminate(pip, EXIT_FAILURE);
 	}
-	else
-	{
-		pip->fd_of = open(pip->output_file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-		if (pip->fd_of == -1)
-		{
-			perror("[PIPEX ERROR] open_io_file > open output");
-			pipex_terminate(pip, EXIT_FAILURE);
-		}
-	}
-	return (0);
 }
 
 // Creates a temporary file and reads standard input in a loop until a limiter
