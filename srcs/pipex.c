@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 17:55:06 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/08 14:20:15 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/11 14:44:58 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ pid_t	child_process(t_pipex *pip, int index, char **envp)
 		redirect_io(pip, index);
 		if (find_cmd(pip, &pip->cmds[index]) == -1)
 		{
-			ft_dprintf(2, PE_NOCMD, pip->cmds[index].args[0]);
+			ft_dprintf(2, PE_NOCMD, pip->name, pip->cmds[index].args[0]);
 			pipex_terminate(pip, 127);
 		}
 		if (execve(pip->cmds[index].path, pip->cmds[index].args, envp) == -1)

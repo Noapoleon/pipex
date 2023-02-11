@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 17:54:41 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/08 14:16:57 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/11 14:44:40 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@
 # define USAGE_HEREDOC	"   or: %s here_doc <LIMITER> %s\n"
 # define USAGE_CMDS		"<cmd1> <cmd2> ... [cmdn] <OUTPUT_FILE>"
 
-# define PE_NOCMD	"%s: command not found\n"
-# define PE_NOCMD	"%s: command not found\n"
+# define PE_NOCMD	"%s: %s: command not found\n"
 
 # define HEREDOC	"here_doc"
 # define HEREPATH	".tmp_heredoc"

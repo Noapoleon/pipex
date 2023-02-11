@@ -33,10 +33,10 @@ all: $(NAME)
 bonus: all
 
 $(NAME): $(LIBDIR)/libft.a $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(CLIBS) -o $(NAME)
+	$(CC) $(MALLOCATOR) $(CFLAGS) $(OBJS) $(CLIBS) -o $(NAME)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR) $(LIBDIR)
-	$(CC) $(CFLAGS) $(CINCS) -c $< -o $@
+	$(CC) $(MALLOCATOR) $(CFLAGS) $(CINCS) -c $< -o $@
 
 $(LIBDIR)/libft.a: | $(LIBDIR)
 	make -C $(LIBFT)

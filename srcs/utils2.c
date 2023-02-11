@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 17:14:01 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/08 13:35:37 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/11 17:26:21 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,12 @@ void	open_io_file(t_pipex *pip, int index)
 		pip->fd_of = open(pip->out_file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (pip->fd_if == -1 || pip->fd_of == -1)
 	{
-		perror(pip->name);
+		if (pip->fd_if == -1)
+			ft_dprintf(2, "%s: %s: %s\n", pip->name, pip->in_file,
+				strerror(errno));
+		else
+			ft_dprintf(2, "%s: %s: %s\n", pip->name, pip->out_file,
+				strerror(errno));
 		pipex_terminate(pip, EXIT_FAILURE);
 	}
 }
@@ -44,7 +49,7 @@ void	make_heredoc(t_pipex *pip)
 		perror("[PIPEX ERROR] make_heredoc > open");
 		pipex_terminate(pip, EXIT_FAILURE);
 	}
-	while (ft_printf("[pipex] > ") && gnl_w(STDIN_FILENO, &line) != -1)
+	while (write(1, "> ", 2) && gnl_w(STDIN_FILENO, &line) != -1)
 	{
 		if (ft_memcmp(pip->limiter, line, len_limiter) == 0
 			&& (line[len_limiter] == '\0' || line[len_limiter] == '\n'))
