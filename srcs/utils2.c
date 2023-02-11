@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 17:14:01 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/11 17:26:21 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/11 23:12:25 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,60 @@ void	open_io_file(t_pipex *pip, int index)
 	}
 }
 
+int	heredoc_set_joined(char **joined, char *line)
+{
+	char	*tmp;
+
+	if (*joined == NULL)
+		*joined = ft_strdup(line);
+	else
+	{
+		tmp = *joined;
+		*joined = ft_strjoin(*joined, line);
+		free(tmp);
+	}
+	free(line);
+	if (*joined == NULL)
+		return (perror("[PIPEX ERROR] heredoc_set_joined"), -1);
+	return (0);
+}
+
+// Reads standard input in a loop and writes to the specified fd
+// Doesn't stop when Ctrl+D is pressed
+int	heredoc_loop(t_pipex *pip, int fd, char **line, char **joined)
+{
+	while (1)
+	{
+		if (*joined == NULL)
+			write(1, "> ", 2);
+		*line = get_next_line(0);
+		if (*line == NULL && *joined != NULL)
+			continue ;
+		else if (*line == NULL && *joined == NULL)
+			return (ft_printf("\n%s: warning: here-document delimited by \
+end-of-file (wanted `%s')\n", pip->name, pip->limiter), 0);
+		if (heredoc_set_joined(joined, *line) == -1)
+			return (-1);
+		if (ft_strncmp(*joined, pip->limiter, ft_strlen(pip->limiter)) == 0)
+			if ((*joined)[ft_strlen(pip->limiter)] == '\n')
+				return (free(*joined), 0);
+		if ((*joined)[ft_strlen(*joined) - 1] == '\n')
+		{
+			write(fd, *joined, ft_strlen(*joined));
+			free(*joined);
+			*joined = NULL;
+		}
+	}
+	return (0);
+}
+
 // Creates a temporary file and reads standard input in a loop until a limiter
 // is found
 void	make_heredoc(t_pipex *pip)
 {
-	const int	len_limiter = ft_strlen(pip->limiter);
-	int			fd;
-	char		*line;
+	int		fd;
+	char	*line;
+	char	*joined;
 
 	fd = open(HEREPATH, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (fd == -1)
@@ -49,16 +96,12 @@ void	make_heredoc(t_pipex *pip)
 		perror("[PIPEX ERROR] make_heredoc > open");
 		pipex_terminate(pip, EXIT_FAILURE);
 	}
-	while (write(1, "> ", 2) && gnl_w(STDIN_FILENO, &line) != -1)
+	joined = NULL;
+	if (heredoc_loop(pip, fd, &line, &joined) == -1)
 	{
-		if (ft_memcmp(pip->limiter, line, len_limiter) == 0
-			&& (line[len_limiter] == '\0' || line[len_limiter] == '\n'))
-		{
-			free(line);
-			break ;
-		}
-		write(fd, line, ft_strlen(line));
-		free(line);
+		close(fd);
+		perror("[PIPEX ERROR] make_heredoc > heredoc_loop");
+		exit(EXIT_FAILURE);
 	}
 	close(fd);
 	pip->fd_if = open(HEREPATH, O_RDONLY);
