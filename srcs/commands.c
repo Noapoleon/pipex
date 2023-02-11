@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 11:35:38 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/11 17:55:08 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/11 18:14:24 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ int	special_cmd_path(t_pipex *pip, t_cmd *cmd)
 		perror("[PIPEX ERROR] find_cmd > ft_strdup");
 		pipex_terminate(pip, EXIT_FAILURE);
 	}
-	ft_dprintf(2, "i -> %d\n", i); // remove
 	return (i);
 }
 
