@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 08:25:49 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/08 13:41:40 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/12 00:41:36 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	init_pipex_vars(t_pipex *pip, int ac, char **av)
 	pip->name = av[0];
 	pip->heredoc = ft_strncmp(HEREDOC, av[1], ft_strlen(HEREDOC) + 1) == 0;
 	pip->cmd_count = ac - 3 - pip->heredoc;
+	pip->cmd_index = 0;
 	if (!pip->heredoc)
 	{
 		pip->in_file = av[1];

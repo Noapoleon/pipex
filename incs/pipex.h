@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 17:54:41 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/11 14:44:40 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/12 00:34:22 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ struct s_pipex
 	int		heredoc;
 	char	*limiter;
 	int		cmd_count;
+	int		cmd_index;
 	t_cmd	*cmds;
 	int		*pipes;
 	pid_t	last_pid;
@@ -58,7 +59,7 @@ struct s_pipex
 };
 
 // pipex.c
-pid_t	child_process(t_pipex *pip, int index, char **envp);
+pid_t	child_process(t_pipex *pip, t_cmd *cmd, char **envp);
 
 // setup1.c
 void	setup_pipex(t_pipex *pip, int ac, char **av, char **envp);

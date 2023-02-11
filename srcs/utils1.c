@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 11:36:36 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/08 13:59:52 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/12 00:26:39 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	pipex_terminate(t_pipex *pip, int exit_mode)
 	close(pip->fd_of);
 	free(pip->pipes);
 	strarr_clear(pip->paths);
-	unlink(HEREPATH);
+	if (pip->cmd_index == 0)
+		unlink(HEREPATH);
 	exit(exit_mode);
 }
 
