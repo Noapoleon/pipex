@@ -6,7 +6,7 @@
 /*   By: nlegrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 11:35:38 by nlegrand          #+#    #+#             */
-/*   Updated: 2023/02/08 14:38:44 by nlegrand         ###   ########.fr       */
+/*   Updated: 2023/02/11 17:55:08 by nlegrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,23 @@ void	make_cmd(t_pipex *pip, t_cmd *cmd, char *cmdstr)
 		perror("[PIPEX ERROR] make_cmds -> ft_split");
 		pipex_terminate(pip, EXIT_FAILURE);
 	}
+	if (cmd->args[0] == NULL)
+	{
+		free(cmd->args);
+		cmd->args = malloc(sizeof(char *) * 2);
+		if (cmd->args == NULL)
+		{
+			perror("[PIPEX ERROR] make_cmds -> malloc");
+			pipex_terminate(pip, EXIT_FAILURE);
+		}
+		cmd->args[0] = ft_strdup("");
+		if (cmd->args[0] == NULL)
+		{
+			perror("[PIPEX ERROR] make_cmds -> ft_strdup");
+			pipex_terminate(pip, EXIT_FAILURE);
+		}
+		cmd->args[1] = NULL;
+	}
 }
 
 // If the command path is local, absolute or non existant this function
@@ -50,8 +67,8 @@ int	special_cmd_path(t_pipex *pip, t_cmd *cmd)
 	int	i;
 
 	i = 0;
-	if (cmd->args[0] == NULL && ++i)
-		cmd->path = ft_strdup("");
+	if (cmd->args[0][0] == '\0')
+		return (-1);
 	else if ((cmd->args[0][0] == '/' || cmd->args[0][0] == '.'
 			|| pip->paths == NULL) && ++i)
 		cmd->path = ft_strdup(cmd->args[0]);
@@ -60,6 +77,7 @@ int	special_cmd_path(t_pipex *pip, t_cmd *cmd)
 		perror("[PIPEX ERROR] find_cmd > ft_strdup");
 		pipex_terminate(pip, EXIT_FAILURE);
 	}
+	ft_dprintf(2, "i -> %d\n", i); // remove
 	return (i);
 }
 
@@ -70,8 +88,11 @@ int	find_cmd(t_pipex *pip, t_cmd *cmd)
 	int		i;
 	char	*slashed;
 
-	if (special_cmd_path(pip, cmd))
+	i = special_cmd_path(pip, cmd);
+	if (i > 0)
 		return (0);
+	else if (i == -1)
+		return (-1);
 	slashed = ft_strjoin("/", cmd->args[0]);
 	if (slashed == NULL)
 		return (perror("[PIPEX ERROR] find_cmd > ft_strjoin (1)"),
